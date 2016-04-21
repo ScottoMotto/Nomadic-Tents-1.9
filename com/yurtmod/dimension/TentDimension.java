@@ -2,6 +2,7 @@ package com.yurtmod.dimension;
 
 import com.yurtmod.main.Config;
 
+import net.minecraft.world.DimensionType;
 import net.minecraftforge.common.DimensionManager;
 
 public class TentDimension 
@@ -10,7 +11,7 @@ public class TentDimension
 	
 	public static void mainRegistry()
 	{
-		DimensionManager.registerProviderType(Config.DIMENSION_ID, WorldProviderTent.class, false);
-		DimensionManager.registerDimension(Config.DIMENSION_ID, Config.DIMENSION_ID);
+		//DimensionManager.registerProviderType(Config.DIMENSION_ID, WorldProviderTent.class, false);
+		DimensionManager.registerDimension(Config.DIMENSION_ID, DimensionType.OVERWORLD);
 	}	
 }

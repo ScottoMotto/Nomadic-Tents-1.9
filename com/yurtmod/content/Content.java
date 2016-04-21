@@ -4,127 +4,170 @@ import com.yurtmod.main.YurtMain;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class Content 
 {
 	// begin blocks
-	public static Block barrier;			public static final String N_BARRIER = "yurtmod_barrier";
-	public static Block indestructibleDirt;	public static final String N_FLOOR = "yurt_floor";
+	public static Block barrier;
+	public static Block indestructibleDirt;
 
-	public static Block yurtRoof;			public static final String N_ROOF = "yurt_roof";
-	public static Block yurtOuterWall;		public static final String N_WALL_OUTER = "yurt_wall_outer";
-	public static Block yurtInnerWall;		public static final String N_WALL_INNER = "yurt_wall_inner";
-	public static Block tepeeWall;			public static final String N_TEPEE_WALL = "tepee_wall";
+	public static Block yurtRoof;		
+	public static Block yurtOuterWall;		
+	public static Block yurtInnerWall;	
+	public static Block tepeeWall;	
 
-	public static Block yurtDoorSmall;		public static final String N_DOOR_SMALL = "yurt_door_0";
-	public static Block yurtDoorMed;		public static final String N_DOOR_MED = "yurt_door_1";
-	public static Block yurtDoorLarge;		public static final String N_DOOR_LARGE = "yurt_door_2";
-	public static Block tepeeDoorSmall; 	public static final String N_TEPEE_DOOR_SMALL = "tepee_door_0";
-	public static Block tepeeDoorMed;		public static final String N_TEPEE_DOOR_MED = "tepee_door_1";
-	public static Block tepeeDoorLarge;		public static final String N_TEPEE_DOOR_LARGE = "tepee_door_2";
+	public static Block yurtDoorSmall;	
+	public static Block yurtDoorMed;		
+	public static Block yurtDoorLarge;		
+	public static Block tepeeDoorSmall; 	
+	public static Block tepeeDoorMed;		
+	public static Block tepeeDoorLarge;		
 
-	public static Block yurtWallFrame;		public static final String N_FRAME_WALL = "yurt_frame_wall";
-	public static Block yurtRoofFrame;		public static final String N_FRAME_ROOF = "yurt_frame_roof";
-	public static Block tepeeWallFrame;		public static final String N_FRAME_TEPEE = "tepee_frame_wall";
+	public static Block yurtWallFrame;		
+	public static Block yurtRoofFrame;		
+	public static Block tepeeWallFrame;
+	
+	public static ItemBlock ibBarrier;
+	public static ItemBlock ibSuperDirt;
+	public static ItemBlock ibYurtRoof;
+	public static ItemBlock ibYurtOuterWall;
+	public static ItemBlock ibYurtInnerWall;
+	public static ItemBlock ibTepeeWall;
+	public static ItemBlock ibYurtDoorSmall;
+	public static ItemBlock ibYurtDoorMed;
+	public static ItemBlock ibYurtDoorLarge;
+	public static ItemBlock ibTepeeDoorSmall;
+	public static ItemBlock ibTepeeDoorMed;
+	public static ItemBlock ibTepeeDoorLarge;
+	public static ItemBlock ibYurtWallFrame;
+	public static ItemBlock ibYurtRoofFrame;
+	public static ItemBlock ibTepeeWallFrame;
 
-	public static Item itemTent;			public static final String N_ITEM_TENT = "tent";
-
-	public static Item itemMallet;			public static final String N_MALLET = "mallet";
-	public static Item itemSuperMallet;		public static final String N_SUPER_MALLET = "super_mallet";
-	public static Item itemTentCanvas;		public static final String N_CANVAS = "tent_canvas";
-	public static Item itemYurtWall;		public static final String N_WALL = "yurt_wall_piece";
-	public static Item itemTepeeWall;		public static final String N_WALL2 = "tepee_wall_piece";
+	public static Item itemTent;
+	public static Item itemMallet;
+	public static Item itemSuperMallet;	
+	public static Item itemTentCanvas;
+	public static Item itemYurtWall;
+	public static Item itemTepeeWall;
 
 	public static void mainRegistry()
 	{
+		initBlocks();
+		initItemBlocks();
+		initItems();
+		
 		registerBlocks();
-		registerFrameBlocks();
 		registerItems();
-		registerTileEntity();
+		registerTileEntity(TileEntityTentDoor.class, "TileEntityTentDoor");
+	}
+	
+	private static void initBlocks()
+	{
+		// blocks
+		barrier = new BlockBarrier();
+		indestructibleDirt = new BlockUnbreakable(Material.ground);
+		yurtOuterWall = new BlockYurtWall();
+		yurtInnerWall = new BlockYurtWall();
+		yurtRoof = new BlockYurtRoof();
+		tepeeWall = new BlockTepeeWall();
+		// doors
+		yurtDoorSmall = new BlockTentDoor();
+		yurtDoorMed = new BlockTentDoor();
+		yurtDoorLarge = new BlockTentDoor();
+		tepeeDoorSmall = new BlockTentDoor();
+		tepeeDoorMed = new BlockTentDoor();
+		tepeeDoorLarge = new BlockTentDoor();
+		// frame blocks
+		yurtWallFrame = new BlockTentFrame(BlockTentFrame.BlockToBecome.YURT_WALL_OUTER);
+		yurtRoofFrame = new BlockTentFrame(BlockTentFrame.BlockToBecome.YURT_ROOF);
+		tepeeWallFrame = new BlockTentFrame(BlockTentFrame.BlockToBecome.TEPEE_WALL);
+	}
+	
+	private static void initItemBlocks()
+	{
+		ibBarrier = new ItemBlock(barrier);
+		ibSuperDirt = new ItemBlock(indestructibleDirt);
+		ibYurtOuterWall = new ItemBlock(yurtOuterWall);
+		ibYurtInnerWall = new ItemBlock(yurtInnerWall);
+		ibYurtRoof = new ItemBlock(yurtRoof);
+		ibTepeeWall = new ItemBlock(tepeeWall);
+		// doors
+		ibYurtDoorSmall = new ItemBlock(yurtDoorSmall);
+		ibYurtDoorMed = new ItemBlock(yurtDoorMed);
+		ibYurtDoorLarge = new ItemBlock(yurtDoorLarge);
+		ibTepeeDoorSmall = new ItemBlock(tepeeDoorSmall);
+		ibTepeeDoorMed = new ItemBlock(tepeeDoorMed);
+		ibTepeeDoorLarge = new ItemBlock(tepeeDoorLarge);
+		// frame blocks
+		ibYurtWallFrame = new ItemBlock(yurtWallFrame);
+		ibYurtRoofFrame = new ItemBlock(yurtRoofFrame);
+		ibTepeeWallFrame = new ItemBlock(tepeeWallFrame);
+	}
+	
+	private static void initItems()
+	{
+		itemTent = new ItemTent();
+		// tools
+		itemMallet = new ItemMallet(ToolMaterial.IRON);
+		itemSuperMallet = new ItemSuperMallet(ToolMaterial.DIAMOND);
+		// crafting only
+		itemTentCanvas = new Item().setCreativeTab(YurtMain.tab);
+		itemYurtWall = new Item().setCreativeTab(YurtMain.tab);
+		itemTepeeWall = new Item().setCreativeTab(YurtMain.tab);
 	}
 
 	private static void registerBlocks() 
 	{
-		// misc. blocks
-		barrier = new BlockBarrier().setUnlocalizedName(N_BARRIER);
-		reg(barrier);
-		indestructibleDirt = new BlockUnbreakable(Material.ground).setUnlocalizedName(N_FLOOR);
-		reg(indestructibleDirt);
-		// yurt walls
-		yurtOuterWall = new BlockYurtWall().setUnlocalizedName(N_WALL_OUTER);
-		reg(yurtOuterWall);
-		yurtInnerWall = new BlockYurtWall().setUnlocalizedName(N_WALL_INNER);
-		reg(yurtInnerWall);
-		yurtRoof = new BlockYurtRoof().setUnlocalizedName(N_ROOF);
-		reg(yurtRoof);
-		// tepee walls
-		tepeeWall = new BlockTepeeWall().setUnlocalizedName(N_TEPEE_WALL);
-		reg(tepeeWall);
+		register(barrier, ibBarrier, "tentmod_barrier");
+		register(indestructibleDirt, ibSuperDirt, "indestructible_dirt");
+		register(yurtOuterWall, ibYurtOuterWall, "yurt_wall_outer");
+		register(yurtInnerWall, ibYurtInnerWall, "yurt_wall_inner");
+		register(yurtRoof, ibYurtRoof, "yurt_roof");
+		register(tepeeWall, ibTepeeWall, "tepee_wall");
 		// doors
-		//// yurt:
-		yurtDoorSmall = new BlockTentDoor().setUnlocalizedName(N_DOOR_SMALL);
-		reg(yurtDoorSmall);
-		yurtDoorMed = new BlockTentDoor().setUnlocalizedName(N_DOOR_MED);
-		reg(yurtDoorMed);
-		yurtDoorLarge = new BlockTentDoor().setUnlocalizedName(N_DOOR_LARGE);
-		reg(yurtDoorLarge);
-		//// tepee:
-		tepeeDoorSmall = new BlockTentDoor().setUnlocalizedName(N_TEPEE_DOOR_SMALL);
-		reg(tepeeDoorSmall);
-		tepeeDoorMed = new BlockTentDoor().setUnlocalizedName(N_TEPEE_DOOR_MED);
-		reg(tepeeDoorMed);
-		tepeeDoorLarge = new BlockTentDoor().setUnlocalizedName(N_TEPEE_DOOR_LARGE);
-		reg(tepeeDoorLarge);
-	}
-
-	private static void registerFrameBlocks() 
-	{
-		// frames
-		yurtWallFrame = new BlockTentFrame(BlockTentFrame.BlockToBecome.YURT_WALL_OUTER).setUnlocalizedName(N_FRAME_WALL);
-		reg(yurtWallFrame);
-		yurtRoofFrame = new BlockTentFrame(BlockTentFrame.BlockToBecome.YURT_ROOF).setUnlocalizedName(N_FRAME_ROOF);
-		reg(yurtRoofFrame);
-		tepeeWallFrame = new BlockTentFrame(BlockTentFrame.BlockToBecome.TEPEE_WALL).setUnlocalizedName(N_FRAME_TEPEE);
-		reg(tepeeWallFrame);
+		register(yurtDoorSmall, ibYurtDoorSmall, "yurt_door_0");
+		register(yurtDoorMed, ibYurtDoorMed, "yurt_door_1");
+		register(yurtDoorLarge, ibYurtDoorLarge, "yurt_door_2");
+		register(tepeeDoorSmall, ibTepeeDoorSmall, "tepee_door_0");
+		register(tepeeDoorMed, ibTepeeDoorMed, "tepee_door_1");
+		register(tepeeDoorLarge, ibTepeeDoorLarge, "tepee_door_2");
+		// frame blocks
+		register(yurtWallFrame, ibYurtWallFrame, "frame_yurt_wall");
+		register(yurtRoofFrame, ibYurtRoofFrame, "frame_yurt_roof");
+		register(tepeeWallFrame, ibTepeeWallFrame, "frame_tepee_wall");
 	}
 
 	private static void registerItems() 
 	{
-		// tent item
-		itemTent = new ItemTent().setUnlocalizedName(N_ITEM_TENT);
-		reg(itemTent);
-		// tools
-		itemMallet = new ItemMallet(ToolMaterial.IRON).setUnlocalizedName(N_MALLET);
-		reg(itemMallet);
-		itemSuperMallet = new ItemSuperMallet(ToolMaterial.EMERALD).setUnlocalizedName(N_SUPER_MALLET);
-		reg(itemSuperMallet);
-		// init crafting-only items
-		itemTentCanvas = new Item().setUnlocalizedName(N_CANVAS).setCreativeTab(YurtMain.tab);
-		reg(itemTentCanvas);
-		itemYurtWall = new Item().setUnlocalizedName(N_WALL).setCreativeTab(YurtMain.tab);
-		reg(itemYurtWall);
-		itemTepeeWall = new Item().setUnlocalizedName(N_WALL2).setCreativeTab(YurtMain.tab);
-		reg(itemTepeeWall);
+		register(itemTent, "tent");
+		register(itemMallet, "mallet");
+		register(itemSuperMallet, "super_mallet");
+		register(itemTentCanvas, "tent_canvas");
+		register(itemYurtWall, "yurt_wall_piece");
+		register(itemTepeeWall, "tepee_wall_piece");
 	}
 
-	private static void registerTileEntity() 
+	private static void registerTileEntity(Class <? extends TileEntity> te, String name) 
 	{
-		GameRegistry.registerTileEntity(TileEntityTentDoor.class, YurtMain.MODID + "_TileEntityTentDoor");	
+		GameRegistry.registerTileEntity(te, YurtMain.MODID + "." + name);	
 	}
 
-	private static void reg(Item in)
+	private static void register(Item item, String name)
 	{
-		GameRegistry.registerItem(in, in.getUnlocalizedName().substring(5));
+		item.setUnlocalizedName(name).setRegistryName(YurtMain.MODID, name);
+		GameRegistry.register(item);
 	}
-
-	private static void reg(Block in)
+	
+	private static void register(Block block, ItemBlock ib, String name)
 	{
-		GameRegistry.registerBlock(in, in.getUnlocalizedName().substring(5));
+		block.setUnlocalizedName(name).setRegistryName(YurtMain.MODID, name);
+		ib.setUnlocalizedName(name).setRegistryName(name);
+		GameRegistry.register(block);
+		GameRegistry.register(ib);
 	}
 }

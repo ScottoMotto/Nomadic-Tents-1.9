@@ -7,8 +7,8 @@ import com.yurtmod.main.YurtMain;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.model.ModelBakery;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.ModelBakery;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -23,80 +23,79 @@ public class ClientProxy extends CommonProxy
 		ResourceLocation[] namesTepeeWall = new ResourceLocation[BlockTepeeWall.NUM_TEXTURES];
 		for(int i = 0; i < len; i++)
 		{
-			String modelName = YurtMain.MODID + ":" + Content.itemTent.getUnlocalizedName(new ItemStack(Content.itemTent, 1, i)).substring(5);
+			String modelName = YurtMain.MODID + ":" + StructureType.getName(new ItemStack(Content.itemTent, 1, i));
 			namesTentItem[i] = new ResourceLocation(modelName);
 			// debug:
 			//System.out.println("registering variant with name '" + modelName + "'");
 		}
 		for(int j = 0; j < BlockTepeeWall.NUM_TEXTURES; j++)
 		{
-			String modelName = YurtMain.MODID + ":tepee_wall_" + j;
+			String modelName = Content.ibTepeeWall.getRegistryName() + "_" + j;
 			namesTepeeWall[j] = new ResourceLocation(modelName);
 			// debug:
 			//System.out.println("registering wall variant with name '" + modelName + "'");
 		}
 		ModelBakery.registerItemVariants(Content.itemTent, namesTentItem);
-		ModelBakery.registerItemVariants(Item.getItemFromBlock(Content.tepeeWall), namesTepeeWall);
+		ModelBakery.registerItemVariants(Content.ibTepeeWall, namesTepeeWall);
 	}
 
 	@Override
 	public void registerRenders()
 	{
 		// register items		
-		register(Content.itemTentCanvas, 0, Content.N_CANVAS);
-		register(Content.itemYurtWall, 0, Content.N_WALL);
-		register(Content.itemTepeeWall, 0, Content.N_WALL2);
-		register(Content.itemMallet, 0, Content.N_MALLET);
-		register(Content.itemSuperMallet, 0, Content.N_SUPER_MALLET);
+		register(Content.itemTentCanvas);
+		register(Content.itemYurtWall);
+		register(Content.itemTepeeWall);
+		register(Content.itemMallet);
+		register(Content.itemSuperMallet);
 		//// register tent item
 		for(int i = 0, len = StructureType.values().length; i < len; i++)
 		{
-			String modelName = Content.itemTent.getUnlocalizedName(new ItemStack(Content.itemTent, 1, i)).substring(5);
+			String modelName = StructureType.getName(new ItemStack(Content.itemTent, 1, i));
 			register(Content.itemTent, i, modelName);
 			// debug:
 			//System.out.println("registering model with name '" + modelName + "'");
 		}
 		// register blocks
-		register(Content.barrier, 0, Content.N_BARRIER);
-		register(Content.indestructibleDirt, 0, Content.N_FLOOR);
+		register(Content.ibBarrier);
+		register(Content.ibSuperDirt);
 		//// wall blocks
-		register(Content.yurtOuterWall, 0, Content.N_WALL_OUTER);
-		register(Content.yurtInnerWall, 0, Content.N_WALL_INNER);
-		register(Content.yurtRoof, 0, Content.N_ROOF);
+		register(Content.ibYurtOuterWall);
+		register(Content.ibYurtInnerWall);
+		register(Content.ibYurtRoof);
 		//// tepee wall block
 		for(int j = 0; j < BlockTepeeWall.NUM_TEXTURES; j++)
 		{
-			register(Content.tepeeWall, j, Content.N_TEPEE_WALL + "_" + j);
+			register(Content.ibTepeeWall, j, "tepee_wall_" + j);
 		}
 		//// door blocks		
-		register(Content.yurtDoorSmall, 0, Content.N_DOOR_SMALL);
-		register(Content.yurtDoorMed, 0, Content.N_DOOR_MED);
-		register(Content.yurtDoorLarge, 0, Content.N_DOOR_LARGE);	
-		register(Content.tepeeDoorSmall, 0, Content.N_TEPEE_DOOR_SMALL);
-		register(Content.tepeeDoorMed, 0, Content.N_TEPEE_DOOR_MED);
-		register(Content.tepeeDoorLarge, 0, Content.N_TEPEE_DOOR_LARGE);
+		register(Content.ibYurtDoorSmall);
+		register(Content.ibYurtDoorMed);
+		register(Content.ibYurtDoorLarge);	
+		register(Content.ibTepeeDoorSmall);
+		register(Content.ibTepeeDoorMed);
+		register(Content.ibTepeeDoorLarge);
 		//// frame blocks
-		register(Content.yurtWallFrame, 0, Content.N_FRAME_WALL);
-		register(Content.yurtRoofFrame, 0, Content.N_FRAME_ROOF);
-		register(Content.tepeeWallFrame, 0, Content.N_FRAME_TEPEE);
+		register(Content.ibYurtWallFrame);
+		register(Content.ibYurtRoofFrame);
+		register(Content.ibTepeeWallFrame);
 		
 		// debug:
 		//System.out.println("Finished registering inventory renders with the ItemModelMesher");
 	}
 	
-	private void register(Item i, int meta, String model)
+	private void register(Item i)
 	{
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(i, meta, getBasicModelLoc(model));
+		register(i, 0);
 	}
 	
-	private void register(Block b, int meta, String blockstateName)
+	private void register(Item i, int meta)
 	{
-		register(Item.getItemFromBlock(b), meta, blockstateName);
+		register(i, meta, i.getRegistryName().toString());
 	}
-
-	/** @return a default ModelResourceLocation for this mod */
-	private ModelResourceLocation getBasicModelLoc(String modelName)
+	
+	private void register(Item i, int meta, String name)
 	{
-		return new ModelResourceLocation(YurtMain.MODID + ":" + modelName, "inventory");
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(i, meta, new ModelResourceLocation(name, "inventory"));
 	}
 }

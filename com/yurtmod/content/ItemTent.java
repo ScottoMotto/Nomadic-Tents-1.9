@@ -16,12 +16,15 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -49,9 +52,9 @@ public class ItemTent extends Item
 	}
 
 	@Override
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ)
+	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
-		return false;
+		return EnumActionResult.SUCCESS;
 	}
 
 	@Override
@@ -63,7 +66,7 @@ public class ItemTent extends Item
 	@Override
 	public String getUnlocalizedName(ItemStack stack) 
 	{
-	    return "item." + this.getStructureType(stack.getItemDamage()).toString().toLowerCase();
+	    return "item." + StructureType.getName(stack);
 	}
 
 	@Override
@@ -76,24 +79,24 @@ public class ItemTent extends Item
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack stack, World worldIn, EntityPlayer player)
+	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World worldIn, EntityPlayer player, EnumHand hand)
 	{
-		if(worldIn.provider.getDimensionId() != Config.DIMENSION_ID && !worldIn.isRemote)
+		if(worldIn.provider.getDimension() != Config.DIMENSION_ID && !worldIn.isRemote)
 		{
-			MovingObjectPosition movingobjectposition = this.getMovingObjectPositionFromPlayer(worldIn, player, true);
+			RayTraceResult rtr = this.getMovingObjectPositionFromPlayer(worldIn, player, true);
 
-			if (movingobjectposition == null)
+			if (rtr == null)
 			{
-				return stack;
+				return new ActionResult(EnumActionResult.FAIL, stack);
 			}
-			else if(movingobjectposition.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK)
+			else if(rtr.typeOfHit == RayTraceResult.Type.BLOCK)
 			{
 				int d = MathHelper.floor_double((double) (player.rotationYaw * 4.0F / 360) + 0.50) & 3;
-				BlockPos hitPos = movingobjectposition.getBlockPos().up(1);
-				boolean hitTop = movingobjectposition.sideHit == EnumFacing.UP;
+				BlockPos hitPos = rtr.getBlockPos().up(1);
+				boolean hitTop = rtr.sideHit == EnumFacing.UP;
 				Block clicked = worldIn.getBlockState(hitPos).getBlock();
 				int meta = stack.getItemDamage();
-				if(clicked == Blocks.snow_layer || clicked.getMaterial() == Material.plants)
+				if(clicked == Blocks.snow_layer || worldIn.getBlockState(hitPos).getMaterial() == Material.plants)
 				{
 					hitTop = true;
 					hitPos.down(1);
@@ -101,9 +104,9 @@ public class ItemTent extends Item
 					//System.out.println("You clicked on a replaceable material, the yurt will replace it.");
 				}
 
-				if(!player.canPlayerEdit(hitPos, hitTop ? EnumFacing.UP : movingobjectposition.sideHit, stack))
+				if(!player.canPlayerEdit(hitPos, hitTop ? EnumFacing.UP : rtr.sideHit, stack))
 				{
-					return stack;
+					return new ActionResult(EnumActionResult.FAIL, stack);
 				}
 				else if(hitTop)
 				{
@@ -123,19 +126,20 @@ public class ItemTent extends Item
 							else System.out.println("Error! Failed to retrieve TileEntityTentDoor at " + hitPos);
 							// remove tent from inventory
 							stack.stackSize--;
+							return new ActionResult(EnumActionResult.SUCCESS, stack);
 						}
 					}
 				}
 			}
 		}
-		return stack;
+		return new ActionResult(EnumActionResult.PASS, stack);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, EntityPlayer player, List par3List, boolean par4)
 	{
-		par3List.add(this.getTooltipColor(stack.getItemDamage()) + StatCollector.translateToLocal("tooltip.extra_dimensional_space"));
+		par3List.add(this.getTooltipColor(stack.getItemDamage()) + I18n.translateToLocal("tooltip.extra_dimensional_space"));
 	}
 
 	public StructureType getStructureType(int meta)
@@ -147,55 +151,50 @@ public class ItemTent extends Item
 	{
 		TentSaveData data = TentSaveData.forWorld(world);
 		StructureType struct = getStructureType(stack.getItemDamage());
+		stack.getTagCompound().setInteger(OFFSET_Z, struct.getTagOffsetZ());
 		switch(struct)
 		{
 		case TEPEE_LARGE:	
 			data.addCountTepeeLarge(1);
 			data.addCountTepeeMed(-1);
 			stack.getTagCompound().setInteger(OFFSET_X, data.getCountTepeeLarge());
-			stack.getTagCompound().setInteger(OFFSET_Z, struct.getTagOffsetZ());
 			break;
 		case TEPEE_MEDIUM:
 			data.addCountTepeeMed(1);
 			data.addCountTepeeSmall(-1);
 			stack.getTagCompound().setInteger(OFFSET_X, data.getCountTepeeMed());
-			stack.getTagCompound().setInteger(OFFSET_Z, struct.getTagOffsetZ());
 			break;
 		case TEPEE_SMALL:
 			data.addCountTepeeSmall(1);
 			stack.getTagCompound().setInteger(OFFSET_X, data.getCountTepeeSmall());
-			stack.getTagCompound().setInteger(OFFSET_Z, struct.getTagOffsetZ());
 			break;
 		case YURT_LARGE:
 			data.addCountYurtLarge(1);
 			data.addCountYurtMed(-1);
 			stack.getTagCompound().setInteger(OFFSET_X, data.getCountYurtLarge());
-			stack.getTagCompound().setInteger(OFFSET_Z, struct.getTagOffsetZ());
 			break;
 		case YURT_MEDIUM:
 			data.addCountYurtMed(1);
 			data.addCountYurtSmall(-1);
 			stack.getTagCompound().setInteger(OFFSET_X, data.getCountYurtMed());
-			stack.getTagCompound().setInteger(OFFSET_Z, struct.getTagOffsetZ());
 			break;
 		case YURT_SMALL:
 			data.addCountYurtSmall(1);
 			stack.getTagCompound().setInteger(OFFSET_X, data.getCountYurtSmall());
-			stack.getTagCompound().setInteger(OFFSET_Z, struct.getTagOffsetZ());
 			break;
 		default:
 			break;
 		}
 	}
 
-	public EnumChatFormatting getTooltipColor(int meta)
+	public TextFormatting getTooltipColor(int meta)
 	{
 		switch(meta)
 		{
-		case 0: case 3: return EnumChatFormatting.RED;
-		case 1: case 4: return EnumChatFormatting.BLUE;
-		case 2: case 5: return EnumChatFormatting.GREEN;
-		default: 		return EnumChatFormatting.GRAY;
+		case 0: case 3: return TextFormatting.RED;
+		case 1: case 4: return TextFormatting.BLUE;
+		case 2: case 5: return TextFormatting.GREEN;
+		default: 		return TextFormatting.GRAY;
 		}
 	}
 }

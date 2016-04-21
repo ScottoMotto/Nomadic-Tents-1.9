@@ -11,13 +11,13 @@ import net.minecraft.block.BlockDoor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -43,7 +43,7 @@ public class BlockTepeeWall extends BlockUnbreakable implements ITepeeBlock
 			// debug:
 			//System.out.println("searched for door. y = " + pos.getY() + ", doorPos = " + (doorPos == null ? "null" : doorPos));
 			//System.out.println("rand seed = " + (doorPos == null ? "null" : (pos.getY() + doorPos.getX() + doorPos.getZ())));
-			if(worldIn.provider.getDimensionId() != Config.DIMENSION_ID && doorPos != null && (Math.abs(pos.getY() - doorPos.getY()) % 2 == 0))
+			if(worldIn.provider.getDimension() != Config.DIMENSION_ID && doorPos != null && (Math.abs(pos.getY() - doorPos.getY()) % 2 == 0))
 			{
 				// debug:
 				//System.out.println("searched for door. y=" + pos.getY() + ", doorPos=" + doorPos);
@@ -81,9 +81,9 @@ public class BlockTepeeWall extends BlockUnbreakable implements ITepeeBlock
     }
     
     @Override
-	protected BlockState createBlockState() 
+	protected BlockStateContainer createBlockState() 
 	{
-		return new BlockState(this, new IProperty[] {TEXTURE});
+		return new BlockStateContainer(this, new IProperty[] {TEXTURE});
 	}
 
 	@Override

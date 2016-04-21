@@ -4,27 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.IProgressUpdate;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
+import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;
 
-public class TentChunkProvider implements IChunkProvider
+public class TentChunkProvider implements IChunkProvider, IChunkGenerator
 {
 	private World worldObj;
 
 	public TentChunkProvider(World worldIn, long dimID, boolean mapFeaturesEnabled)
 	{
 		this.worldObj = worldIn;
-	}
-
-	@Override
-	public boolean chunkExists(int x, int z) 
-	{
-		return true;
 	}
 	
 	@Override
@@ -36,35 +31,14 @@ public class TentChunkProvider implements IChunkProvider
 	}
 
 	@Override
-	public Chunk provideChunk(BlockPos pos) 
-	{
-		return provideChunk(pos.getX(), pos.getZ());
-	}
-
-	@Override
-	public void populate(IChunkProvider icp, int x, int z) {}
+	public void populate(int x, int z) {}
 	@Override
 	public void recreateStructures(Chunk ch, int x, int z) {}
-	@Override
-	public void saveExtraData() {}
-
-
-	@Override
-	public boolean saveChunks(boolean p_73151_1_, IProgressUpdate p_73151_2_) 
-	{
-		return true;
-	}
 
 	@Override
 	public boolean unloadQueuedChunks() 
 	{
 		return false;
-	}
-
-	@Override
-	public boolean canSave() 
-	{
-		return true;
 	}
 
 	@Override
@@ -74,15 +48,9 @@ public class TentChunkProvider implements IChunkProvider
 	}
 
 	@Override
-	public int getLoadedChunkCount() 
+	public Chunk getLoadedChunk(int x, int z) 
 	{
-		return 0;
-	}
-
-	@Override
-	public boolean func_177460_a(IChunkProvider p_177460_1_, Chunk p_177460_2_, int p_177460_3_, int p_177460_4_) 
-	{
-		return true;
+		return this.provideChunk(x, z);
 	}
 
 	@Override
@@ -95,5 +63,11 @@ public class TentChunkProvider implements IChunkProvider
 	public List<SpawnListEntry> getPossibleCreatures(EnumCreatureType creatureType, BlockPos pos) 
 	{
 		return new ArrayList();
+	}
+
+	@Override
+	public boolean generateStructures(Chunk chunkIn, int x, int z) 
+	{
+		return false;
 	}
 }

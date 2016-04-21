@@ -4,7 +4,6 @@ import com.yurtmod.content.BlockTepeeWall;
 import com.yurtmod.content.Content;
 import com.yurtmod.content.ItemTent;
 import com.yurtmod.content.TileEntityTentDoor;
-import com.yurtmod.dimension.StructureHelper.StructureType;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -13,8 +12,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /** {{numForward=dX, numRight=dZ}} from door **/
@@ -75,7 +74,7 @@ public class StructureHelper
 		{
 			int offsetx = stack.getTagCompound().getInteger(ItemTent.OFFSET_X);
 			int offsetz = stack.getTagCompound().getInteger(ItemTent.OFFSET_Z);
-			te.setStructureType(this.values()[stack.getItemDamage() % StructureType.values().length]);
+			te.setStructureType(StructureType.values()[stack.getItemDamage() % StructureType.values().length]);
 			te.setOffsetX(offsetx);
 			te.setOffsetZ(offsetz);
 			te.setOverworldXYZ(player.posX, player.posY, player.posZ);
@@ -91,14 +90,19 @@ public class StructureHelper
 			case TEPEE_SMALL: 	return Content.tepeeDoorSmall;
 			case TEPEE_MEDIUM: 	return Content.tepeeDoorMed;
 			case TEPEE_LARGE: 	return Content.tepeeDoorLarge;
+			default:			return Blocks.air;
 			}
-			return null;
 		}
 		
 		/** @return the Z-offset of this structure type in the Tent Dimension **/
 		public int getTagOffsetZ()
 		{
 			return this.ordinal();
+		}
+		
+		public static String getName(ItemStack stack)
+		{
+			return StructureType.values()[stack.getItemDamage()].toString().toLowerCase();
 		}
 	}
 	
@@ -148,7 +152,7 @@ public class StructureHelper
 	
 	public static boolean isReplaceableMaterial(World world, BlockPos pos)
 	{
-		return isReplaceableMaterial(world.getBlockState(pos).getBlock().getMaterial());
+		return isReplaceableMaterial(world.getBlockState(pos).getMaterial());
 	}
 	
 	/** Structure blocks are allowed to replace blocks of these materials */

@@ -10,16 +10,16 @@ import net.minecraft.block.BlockDoor;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class BlockTentDoor extends BlockUnbreakable implements ITileEntityProvider, ITepeeBlock, IYurtBlock
@@ -35,27 +35,27 @@ public class BlockTentDoor extends BlockUnbreakable implements ITileEntityProvid
 	@Override
 	public boolean canPlaceBlockAt(World world, BlockPos pos)
 	{
-		Material m1 = world.getBlockState(pos).getBlock().getMaterial();
-		Material m2 = world.getBlockState(pos.up(1)).getBlock().getMaterial();
+		Material m1 = world.getBlockState(pos).getMaterial();
+		Material m2 = world.getBlockState(pos.up(1)).getMaterial();
 		return (m1 == Material.air || m1 == Material.water) && (m2 == Material.air || m2 == Material.water);
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ)
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
 		if(!worldIn.isRemote)
 		{
 			int meta = this.getMetaFromState(state);
 			BlockPos base = meta % 4 == 0 ? pos : pos.down(1);
 			TileEntity te = worldIn.getTileEntity(base);
-			int dimID = worldIn.provider.getDimensionId();
+			int dimID = worldIn.provider.getDimension();
 			if(te != null && te instanceof TileEntityTentDoor)
 			{
 				TileEntityTentDoor teyd = (TileEntityTentDoor) te;
 				StructureType struct = teyd.getStructureType();
 				int dir = dimID == Config.DIMENSION_ID ? StructureHelper.STRUCTURE_DIR : StructureHelper.isValidStructure(worldIn, struct, base);
 				// deconstruct the tent if the player uses a tentHammer on the door (and in overworld and with fully built tent)
-				if(player.getHeldItem() != null && player.getHeldItem().getItem() instanceof ItemMallet && worldIn.provider.getDimensionId() != Config.DIMENSION_ID)
+				if(player.getHeldItem(hand) != null && player.getHeldItem(hand).getItem() instanceof ItemMallet && worldIn.provider.getDimension() != Config.DIMENSION_ID)
 				{
 					if(dir == -1) return false;
 					// debug:
@@ -71,7 +71,7 @@ public class BlockTentDoor extends BlockUnbreakable implements ITileEntityProvid
 						// remove the yurt structure
 						StructureHelper.deleteSmallStructure(worldIn, teyd.getStructureType(), base, dir);
 						// damage the item
-						player.getHeldItem().damageItem(DECONSTRUCT_DAMAGE, player);
+						player.getHeldItem(hand).damageItem(DECONSTRUCT_DAMAGE, player);
 
 						return true;
 					}	
@@ -82,7 +82,7 @@ public class BlockTentDoor extends BlockUnbreakable implements ITileEntityProvid
 					else return ((TileEntityTentDoor)te).onPlayerActivate(player);
 				}
 			}
-			else System.out.println("Error! Failed to retrieve TileEntityYurtDoor at " + pos);
+			else System.out.println("Error! Failed to retrieve TileEntityTentDoor at " + pos);
 		}
 		return false;
 	}
@@ -118,9 +118,9 @@ public class BlockTentDoor extends BlockUnbreakable implements ITileEntityProvid
 	}
 
 	@Override
-	protected BlockState createBlockState() 
+	protected BlockStateContainer createBlockState() 
 	{
-		return new BlockState(this, new IProperty[] {BlockDoor.HALF});
+		return new BlockStateContainer(this, new IProperty[] {BlockDoor.HALF});
 	}
 
 	@Override

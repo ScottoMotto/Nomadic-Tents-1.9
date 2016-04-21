@@ -40,38 +40,32 @@ public class Crafting
 		
 		if(Config.ALLOW_CRAFT_SUPER_MALLET)
 		{
-			if(Config.REQUIRE_GOLD_BLOCKS)
-			{
-				GameRegistry.addShapedRecipe(new ItemStack(Content.itemSuperMallet, 1), " IS"," CI","S  ",'I',Item.getItemFromBlock(Blocks.gold_block),'S',Items.stick,'C',Content.itemTentCanvas);
-			}
-			else
-			{
-				GameRegistry.addShapedRecipe(new ItemStack(Content.itemSuperMallet, 1), " IS"," CI","S  ",'I',new ItemStack(Items.golden_apple, 1, 1),'S',Items.stick,'C',Content.itemTentCanvas);
-			}
+			ItemStack gold = Config.REQUIRE_GOLD_BLOCKS ? new ItemStack(Blocks.gold_block) : new ItemStack(Items.golden_apple, 1, 1);
+			GameRegistry.addShapedRecipe(new ItemStack(Content.itemSuperMallet, 1), " IS"," CI","S  ",'I',gold,'S',Items.stick,'C',Content.itemTentCanvas);
 		}
 		if(Config.ALLOW_CRAFT_YURT_SMALL)
 		{
-			GameRegistry.addShapedRecipe(new ItemStack(Content.itemTent, 1, StructureHelper.StructureType.YURT_SMALL.ordinal()), " F ","F F",'F',Content.itemYurtWall);
+			GameRegistry.addShapedRecipe(StructureHelper.StructureType.YURT_SMALL.getDropStack(), " F ","F F",'F',Content.itemYurtWall);
 		}
 		if(Config.ALLOW_CRAFT_YURT_MED)
 		{
-			GameRegistry.addShapedRecipe(new ItemStack(Content.itemTent, 1, StructureHelper.StructureType.YURT_MEDIUM.ordinal()), " F ","FYF",'F',Content.itemYurtWall,'Y',new ItemStack(Content.itemTent, 1, 0));
+			GameRegistry.addShapedRecipe(StructureHelper.StructureType.YURT_MEDIUM.getDropStack(), " F ","FYF",'F',Content.itemYurtWall,'Y',StructureHelper.StructureType.YURT_SMALL.getDropStack());
 		}
 		if(Config.ALLOW_CRAFT_YURT_LARGE)
 		{
-			GameRegistry.addShapedRecipe(new ItemStack(Content.itemTent, 1, StructureHelper.StructureType.YURT_LARGE.ordinal()), " F ","FYF",'F',Content.itemYurtWall,'Y',new ItemStack(Content.itemTent, 1, 1));
+			GameRegistry.addShapedRecipe(StructureHelper.StructureType.YURT_LARGE.getDropStack(), " F ","FYF",'F',Content.itemYurtWall,'Y',StructureHelper.StructureType.YURT_MEDIUM.getDropStack());
 		}
 		if(Config.ALLOW_CRAFT_TEPEE_SMALL)
 		{
-			GameRegistry.addShapedRecipe(new ItemStack(Content.itemTent, 1, StructureHelper.StructureType.TEPEE_SMALL.ordinal()), " F ","FFF","F F",'F',Content.itemTepeeWall);
+			GameRegistry.addShapedRecipe(StructureHelper.StructureType.TEPEE_SMALL.getDropStack(), " F ","FFF","F F",'F',Content.itemTepeeWall);
 		}
 		if(Config.ALLOW_CRAFT_TEPEE_MED)
 		{
-			GameRegistry.addShapedRecipe(new ItemStack(Content.itemTent, 1, StructureHelper.StructureType.TEPEE_MEDIUM.ordinal()), " F ","FFF","FTF",'F',Content.itemTepeeWall,'T',new ItemStack(Content.itemTent, 1, 3));
+			GameRegistry.addShapedRecipe(StructureHelper.StructureType.TEPEE_MEDIUM.getDropStack(), " F ","FFF","FTF",'F',Content.itemTepeeWall,'T',StructureHelper.StructureType.TEPEE_SMALL.getDropStack());
 		}
 		if(Config.ALLOW_CRAFT_TEPEE_LARGE)
 		{
-			GameRegistry.addShapedRecipe(new ItemStack(Content.itemTent, 1, StructureHelper.StructureType.TEPEE_LARGE.ordinal()), " F ","FFF","FTF",'F',Content.itemTepeeWall,'T',new ItemStack(Content.itemTent, 1, 4));
+			GameRegistry.addShapedRecipe(StructureHelper.StructureType.TEPEE_LARGE.getDropStack(), " F ","FFF","FTF",'F',Content.itemTepeeWall,'T',StructureHelper.StructureType.TEPEE_MEDIUM.getDropStack());
 		}
 	}
 }

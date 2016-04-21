@@ -43,7 +43,7 @@ public class TentTeleporter extends Teleporter
 			float yaw;
 			entity.motionX = entity.motionY = entity.motionZ = 0.0D;
 
-			if(worldServer.provider.getDimensionId() == Config.DIMENSION_ID)
+			if(worldServer.provider.getDimension() == Config.DIMENSION_ID)
 			{	
 				entityX = this.yurtCornerX + 1.5D;
 				entityY = this.yurtCornerY + 1.01D;

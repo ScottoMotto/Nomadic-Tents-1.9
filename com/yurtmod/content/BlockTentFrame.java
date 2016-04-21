@@ -4,13 +4,16 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumWorldBlockLayer;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -21,27 +24,30 @@ public class BlockTentFrame extends BlockUnbreakable
 	public static final int NUM_TEXTURES = 4;
 	private final BlockToBecome TO_BECOME;
 	public static final PropertyInteger PROGRESS = PropertyInteger.create("progress", 0, NUM_TEXTURES - 1);
+	
+	public static final AxisAlignedBB AABB_PROGRESS_0 = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.25D, 1.0D);
+	public static final AxisAlignedBB AABB_PROGRESS_1 = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D);
+	public static final AxisAlignedBB AABB_PROGRESS_2 = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D);
 
 	protected BlockTentFrame(BlockToBecome type)
 	{
 		super(Material.wood);
 		this.TO_BECOME = type;
 		this.setDefaultState(this.blockState.getBaseState().withProperty(PROGRESS, 0));
-		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ)
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
 		if(!worldIn.isRemote)
 		{
 			int meta = this.getMetaFromState(state);
 
-			if(player.getHeldItem() != null && player.getHeldItem().getItem() instanceof ItemMallet)
+			if(player.getHeldItem(hand) != null && player.getHeldItem(hand).getItem() instanceof ItemMallet)
 			{
-				if(player.getHeldItem().getItem() == Content.itemSuperMallet)
+				if(player.getHeldItem(hand).getItem() == Content.itemSuperMallet)
 				{
-					return onSuperMalletUsed(worldIn, pos);
+					return onSuperMalletUsed(worldIn, pos, player, player.getHeldItem(hand));
 				}
 				// debug:
 				//System.out.print("Activated by Tent Mallet\n");
@@ -54,7 +60,7 @@ public class BlockTentFrame extends BlockUnbreakable
 				else
 				{
 					this.becomeReal(worldIn, pos);
-					player.getHeldItem().damageItem(1, player);
+					player.getHeldItem(hand).damageItem(1, player);
 				}
 				return true;
 			}
@@ -63,44 +69,47 @@ public class BlockTentFrame extends BlockUnbreakable
 	}
 
 	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess worldIn, BlockPos pos)
+	 public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
 	{
-		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-		int meta = this.getMetaFromState(worldIn.getBlockState(pos));
+		int meta = this.getMetaFromState(state);
 		if(meta == 0)
 		{
-			this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.25F, 1.0F);
+			return AABB_PROGRESS_0;
 		}
 		else if(meta <= NUM_TEXTURES / 2)
 		{
-			this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
+			return AABB_PROGRESS_1;
 		}
-		else
-		{
-			this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-		}
+		else return AABB_PROGRESS_2;
 	}
+	
+	@Override
+	public AxisAlignedBB getSelectedBoundingBox(IBlockState blockState, World worldIn, BlockPos pos)
+    {
+        return NULL_AABB;
+    }
+	
+	@Override
+    public void onFallenUpon(World worldIn, BlockPos pos, Entity entityIn, float fallDistance)
+    {
+        return;
+    }
 
-	@Override
-	public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state)
-	{
-		return null;
-	}
-	
-	@Override
-    public void setBlockBoundsForItemRender() 
+    @Override
+    public void onLanded(World worldIn, Entity entityIn)
     {
-		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.25F, 1.0F);
+        return;
     }
-	
-	@SideOnly(Side.CLIENT)
-    public EnumWorldBlockLayer getBlockLayer()
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public BlockRenderLayer getBlockLayer()
     {
-        return EnumWorldBlockLayer.CUTOUT;
+        return BlockRenderLayer.CUTOUT;
     }
 	
 	@Override
-	public boolean isFullCube()
+	public boolean isFullCube(IBlockState state)
     {
         return false;
     }
@@ -112,9 +121,9 @@ public class BlockTentFrame extends BlockUnbreakable
     }
 
 	@Override
-	protected BlockState createBlockState() 
+	protected BlockStateContainer createBlockState() 
 	{
-		return new BlockState(this, new IProperty[] {PROGRESS});
+		return new BlockStateContainer(this, new IProperty[] {PROGRESS});
 	}
 
 	@Override
@@ -130,7 +139,7 @@ public class BlockTentFrame extends BlockUnbreakable
 	}
 
 	@Override
-	public boolean isOpaqueCube()
+	public boolean isOpaqueCube(IBlockState state)
 	{
 		return false;
 	}
@@ -140,7 +149,7 @@ public class BlockTentFrame extends BlockUnbreakable
 		return !worldIn.isRemote && worldIn.setBlockState(pos, this.TO_BECOME.getBlock());
 	}
 
-	public boolean onSuperMalletUsed(World worldIn, BlockPos pos)
+	public boolean onSuperMalletUsed(World worldIn, BlockPos pos, EntityPlayer player, ItemStack stack)
 	{
 		this.becomeReal(worldIn, pos);
 		for(int i = -1; i < 2; i++)
@@ -153,7 +162,8 @@ public class BlockTentFrame extends BlockUnbreakable
 					Block current = worldIn.getBlockState(curPos).getBlock();
 					if(current instanceof BlockTentFrame)
 					{
-						((BlockTentFrame) current).onSuperMalletUsed(worldIn,curPos);
+						((BlockTentFrame) current).onSuperMalletUsed(worldIn,curPos,player,stack);
+						stack.damageItem(1, player);
 					}
 				}
 			}
