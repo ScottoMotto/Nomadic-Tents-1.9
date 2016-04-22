@@ -41,8 +41,8 @@ public class TentTeleporter extends Teleporter
 
 			if(TentDimension.isTentDimension(worldServer.provider.getDimension()))
 			{	
-				entityX = this.tentCorner.getX() + 1.0D;
-				entityY = this.tentCorner.getY() + 1.01D;
+				entityX = this.tentCorner.getX() + 1.5D;
+				entityY = this.tentCorner.getY() + 0.01D;
 				entityZ = this.tentCorner.getZ() + this.structure.getDoorPosition() + 0.5D;
 				yaw = -90F;
 				// try to build a tent in that location (tent should check if it already exists)

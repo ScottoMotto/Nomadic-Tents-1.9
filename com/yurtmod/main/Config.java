@@ -15,6 +15,7 @@ public class Config
 	public static boolean REQUIRE_MORE_LEATHER;
 	public static boolean REQUIRE_GOLD_BLOCKS;
 	public static int TEPEE_DECORATED_RATIO;
+	public static int TENT_BIOME_ID;
 
 	private static final String CATEGORY_CRAFTING = "crafting";
 
@@ -44,7 +45,9 @@ public class Config
 				"When true, the Tepee Wall recipe requires 6 leather instead of 4");
 		TEPEE_DECORATED_RATIO = config.getInt("Tepee Design Ratio", Configuration.CATEGORY_GENERAL, 3, 1, 64, 
 				"Number of plain Tepee Blocks generated for every decorated tepee block (does not affect horizontal patterns)");
-
+		TENT_BIOME_ID = config.getInt("Sky Biome ID", CATEGORY_CRAFTING, 99, 0, 255, 
+				"The ID to use for the empty biome in the Tent Dimension");
+		
 		config.save();
 	}
 }

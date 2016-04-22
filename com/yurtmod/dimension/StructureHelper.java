@@ -240,7 +240,7 @@ public class StructureHelper
 				for(int j = 0; j < sqWidth; j++)
 				{
 					BlockPos at = new BlockPos(corner.getX() + i, corner.getY(), corner.getZ() + j);
-					if(worldIn.isAirBlock(at)) worldIn.setBlockState(at, Blocks.dirt.getDefaultState(), 2);
+					if(worldIn.isAirBlock(at)) worldIn.setBlockState(at, Blocks.dirt.getDefaultState(), 3);
 					worldIn.setBlockState(at.down(1), Content.indestructibleDirt.getDefaultState(), 2);
 				}
 			}

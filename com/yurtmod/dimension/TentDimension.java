@@ -1,5 +1,6 @@
 package com.yurtmod.dimension;
 
+import com.yurtmod.main.Config;
 import com.yurtmod.main.YurtMain;
 
 import net.minecraft.world.DimensionType;
@@ -20,7 +21,7 @@ public class TentDimension
 	public static void mainRegistry()
 	{
 		//DimensionManager.registerProviderType(Config.DIMENSION_ID, WorldProviderTent.class, false);
-		BiomeManager.addBiome(BiomeType.WARM, new BiomeEntry(BIOME_SKY, 99));
+		BiomeManager.addBiome(BiomeType.WARM, new BiomeEntry(BIOME_SKY, Config.TENT_BIOME_ID));
 		DimensionManager.registerDimension(DIMENSION_ID, TentDimension.TENT_DIMENSION);
 	}
 	

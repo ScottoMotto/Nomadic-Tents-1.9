@@ -155,7 +155,7 @@ public class TileEntityTentDoor extends TileEntity
 						dimensionFrom, mcServer.worldServerForDimension(TentDimension.DIMENSION_ID), 
 						corners, this.prevX, this.prevY, this.prevZ, this.structure);
 				// debug:
-				System.out.print("Created teleporter to Tent Dimension: " + tel.toString());
+				//System.out.print("Created teleporter to Tent Dimension: " + tel.toString());
 				// teleport the player to Tent Dimension
 				playerMP.timeUntilPortal = 10;	
 				mcServer.getPlayerList().transferPlayerToDimension(playerMP, TentDimension.DIMENSION_ID, tel);
@@ -166,7 +166,7 @@ public class TileEntityTentDoor extends TileEntity
 						dimensionFrom, mcServer.worldServerForDimension(this.getPrevDimension()), 
 						corners, this.prevX, this.prevY, this.prevZ, this.structure);
 				// debug:
-				System.out.print("Created teleporter to Overworld: " + tel.toString());
+				//System.out.print("Created teleporter to Overworld: " + tel.toString());
 				// teleport player to overworld
 				playerMP.timeUntilPortal = 10;
 				mcServer.getPlayerList().transferPlayerToDimension(playerMP, this.getPrevDimension(), tel);

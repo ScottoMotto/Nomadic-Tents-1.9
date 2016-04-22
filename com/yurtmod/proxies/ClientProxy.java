@@ -28,7 +28,7 @@ public class ClientProxy extends CommonProxy
 			namesTentItem[i] = new ResourceLocation(modelName);
 			ModelLoader.setCustomModelResourceLocation(Content.itemTent, i, new ModelResourceLocation(modelName, "inventory"));
 			// debug:
-			System.out.println("registering variant with name '" + modelName + "'");
+			//System.out.println("registering variant with name '" + modelName + "'");
 		}
 		for(int j = 0; j < BlockTepeeWall.NUM_TEXTURES; j++)
 		{
@@ -36,7 +36,7 @@ public class ClientProxy extends CommonProxy
 			namesTepeeWall[j] = new ResourceLocation(modelName);
 			ModelLoader.setCustomModelResourceLocation(Content.ibTepeeWall, j, new ModelResourceLocation(modelName));
 			// debug:
-			System.out.println("registering wall variant with name '" + modelName + "'");
+			//System.out.println("registering wall variant with name '" + modelName + "'");
 		}
 		ModelBakery.registerItemVariants(Content.itemTent, namesTentItem);
 		ModelBakery.registerItemVariants(Content.ibTepeeWall, namesTepeeWall);
@@ -58,7 +58,7 @@ public class ClientProxy extends CommonProxy
 			String modelName = YurtMain.MODID + ":" + StructureType.getName(i);
 			register(Content.itemTent, i, modelName);
 			// debug:
-			System.out.println("registering model with name '" + modelName + "'");
+			//System.out.println("registering tent item with name '" + modelName + "'");
 		}
 		// register blocks
 		register(Content.ibBarrier);
@@ -70,7 +70,10 @@ public class ClientProxy extends CommonProxy
 		//// tepee wall block
 		for(int j = 0; j < BlockTepeeWall.NUM_TEXTURES; j++)
 		{
-			register(Content.ibTepeeWall, j, Content.ibTepeeWall.getRegistryName().toString() + j);
+			String name = Content.ibTepeeWall.getRegistryName().toString() + "_" + j;
+			register(Content.ibTepeeWall, j, name);
+			// debug:
+			//System.out.println("registering tepee wall with name '" + name + "'");
 		}
 		//// door blocks		
 		register(Content.ibYurtDoorSmall);
@@ -85,7 +88,7 @@ public class ClientProxy extends CommonProxy
 		register(Content.ibTepeeWallFrame);
 		
 		// debug:
-		System.out.println("Finished registering inventory renders with the ItemModelMesher");
+		//System.out.println("Finished registering inventory renders with the ItemModelMesher");
 	}
 	
 	private void register(Item i)
