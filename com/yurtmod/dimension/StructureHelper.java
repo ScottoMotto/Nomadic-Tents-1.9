@@ -72,6 +72,8 @@ public class StructureHelper
 		
 		public static void applyToTileEntity(EntityPlayer player, ItemStack stack, TileEntityTentDoor te)
 		{
+			if(stack.getTagCompound() == null || !stack.getTagCompound().hasKey(ItemTent.OFFSET_X)) return;
+			
 			int offsetx = stack.getTagCompound().getInteger(ItemTent.OFFSET_X);
 			int offsetz = stack.getTagCompound().getInteger(ItemTent.OFFSET_Z);
 			te.setStructureType(StructureType.values()[stack.getItemDamage() % StructureType.values().length]);
@@ -102,7 +104,12 @@ public class StructureHelper
 		
 		public static String getName(ItemStack stack)
 		{
-			return StructureType.values()[stack.getItemDamage()].toString().toLowerCase();
+			return getName(stack.getItemDamage());
+		}
+		
+		public static String getName(int metadata)
+		{
+			return StructureType.values()[metadata].toString().toLowerCase();
 		}
 	}
 	

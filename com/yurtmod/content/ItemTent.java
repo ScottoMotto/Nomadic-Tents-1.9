@@ -121,6 +121,19 @@ public class ItemTent extends Item
 			subItems.add(new ItemStack(itemIn, 1, i));
 		}
 	}
+	
+	/**
+     * Retrieves the normal 'lifespan' of this item when it is dropped on the ground as a EntityItem.
+     * This is in ticks, standard result is 6000, or 5 mins.
+     *
+     * @param itemStack The current ItemStack
+     * @param world The world the entity is in
+     * @return The normal lifespan in ticks.
+     */
+    public int getEntityLifespan(ItemStack itemStack, World world)
+    {
+        return Integer.MAX_VALUE;
+    }
 
 	@Override
 	@SideOnly(Side.CLIENT)

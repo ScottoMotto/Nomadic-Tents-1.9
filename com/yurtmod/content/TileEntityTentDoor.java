@@ -7,6 +7,7 @@ import com.yurtmod.dimension.TentTeleporter;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
@@ -26,6 +27,7 @@ public class TileEntityTentDoor extends TileEntity
 	private int offsetZ;	
 	private double prevX, prevY, prevZ;
 	private int prevDimID;
+	private ItemStack tentStack;
 	
 	public TileEntityTentDoor()
 	{
@@ -121,7 +123,7 @@ public class TileEntityTentDoor extends TileEntity
 		return new double[] {this.prevX, this.prevY, this.prevZ};
 	}
 
-	private BlockPos getXYZFromOffsets()
+	public BlockPos getXYZFromOffsets()
 	{
 		int x = this.offsetX * (StructureHelper.MAX_SQ_WIDTH);
 		int y = StructureHelper.FLOOR_Y + 1;

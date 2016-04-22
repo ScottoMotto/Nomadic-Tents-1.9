@@ -40,7 +40,7 @@ public class StructureTepee
 		// check if the rest of the yurt has already been generated
 		BlockPos corner = new BlockPos(cornerX, StructureHelper.FLOOR_Y, cornerZ);
 		int doorZ = cornerZ;
-		boolean ret = true;
+		boolean hasStructure = true;
 		if(StructureHelper.generatePlatform(worldIn, corner, this.structure.getSqWidth()))
 		{
 			BlockPos doorPos = new BlockPos(cornerX, StructureHelper.FLOOR_Y + 1, cornerZ + this.structure.getDoorPosition());
@@ -48,20 +48,20 @@ public class StructureTepee
 			switch(this.structure)
 			{
 			case TEPEE_SMALL:
-				ret = this.generateSmallInDimension(worldIn, doorPos);
+				hasStructure = this.generateSmallInDimension(worldIn, doorPos);
 				break;
 			case TEPEE_MEDIUM:
-				ret = this.generateMedInDimension(worldIn, doorPos);
+				hasStructure = this.generateMedInDimension(worldIn, doorPos);
 				break;
 			case TEPEE_LARGE:
-				ret = this.generateLargeInDimension(worldIn, doorPos);
+				hasStructure = this.generateLargeInDimension(worldIn, doorPos);
 				break;
 			default: break;
 			}			
 		}
 
 		// set tile entity door information
-		if(ret)
+		if(hasStructure)
 		{
 			doorZ = cornerZ + this.structure.getDoorPosition();
 			TileEntity te = worldIn.getTileEntity(new BlockPos(cornerX, StructureHelper.FLOOR_Y + 1, doorZ));
@@ -76,7 +76,7 @@ public class StructureTepee
 				teyd.setPrevDimension(prevDimension);
 				// debug:
 				//System.out.println("OverworldXYZ = " + overworldX + "," + overworldY + "," + overworldZ);
-				return ret;
+				return hasStructure;
 			}
 			else System.out.println("Error! Failed to retrive TileEntityYurtDoor at " + cornerX + ", " + (StructureHelper.FLOOR_Y + 1) + ", " + doorZ);
 		}

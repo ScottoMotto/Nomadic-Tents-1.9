@@ -24,7 +24,7 @@ public class ClientProxy extends CommonProxy
 		ResourceLocation[] namesTepeeWall = new ResourceLocation[BlockTepeeWall.NUM_TEXTURES];
 		for(int i = 0; i < len; i++)
 		{
-			String modelName = YurtMain.MODID + ":" + StructureType.getName(new ItemStack(Content.itemTent, 1, i));
+			String modelName = YurtMain.MODID + ":" + StructureType.getName(i);
 			namesTentItem[i] = new ResourceLocation(modelName);
 			ModelLoader.setCustomModelResourceLocation(Content.itemTent, i, new ModelResourceLocation(modelName, "inventory"));
 			// debug:
@@ -54,10 +54,11 @@ public class ClientProxy extends CommonProxy
 		//// register tent item
 		for(int i = 0, len = StructureType.values().length; i < len; i++)
 		{
-			String modelName = StructureType.getName(new ItemStack(Content.itemTent, 1, i));
+			// getName returns something like "yurt_small"
+			String modelName = YurtMain.MODID + ":" + StructureType.getName(i);
 			register(Content.itemTent, i, modelName);
 			// debug:
-			//System.out.println("registering model with name '" + modelName + "'");
+			System.out.println("registering model with name '" + modelName + "'");
 		}
 		// register blocks
 		register(Content.ibBarrier);
@@ -69,7 +70,7 @@ public class ClientProxy extends CommonProxy
 		//// tepee wall block
 		for(int j = 0; j < BlockTepeeWall.NUM_TEXTURES; j++)
 		{
-			register(Content.ibTepeeWall, j, "tepee_wall_" + j);
+			register(Content.ibTepeeWall, j, Content.ibTepeeWall.getRegistryName().toString() + j);
 		}
 		//// door blocks		
 		register(Content.ibYurtDoorSmall);

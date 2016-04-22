@@ -39,7 +39,7 @@ public class StructureYurt
 		// check if the rest of the yurt has already been generated
 		int doorZ = cornerZ;
 		BlockPos corner = new BlockPos(cornerX, StructureHelper.FLOOR_Y, cornerZ);
-		boolean ret = true;
+		boolean hasStructure = true;
 		if(StructureHelper.generatePlatform(worldIn, corner, this.structure.getSqWidth()))
 		{
 			// make the yurt
@@ -47,20 +47,20 @@ public class StructureYurt
 			switch(this.structure)
 			{
 			case YURT_SMALL:
-				ret = generateSmallInDimension(worldIn, doorPos, StructureHelper.STRUCTURE_DIR);
+				hasStructure = generateSmallInDimension(worldIn, doorPos, StructureHelper.STRUCTURE_DIR);
 				break;
 			case YURT_MEDIUM:
-				ret = generateMedInDimension(worldIn, doorPos, StructureHelper.STRUCTURE_DIR);
+				hasStructure = generateMedInDimension(worldIn, doorPos, StructureHelper.STRUCTURE_DIR);
 				break;
 			case YURT_LARGE:
-				ret = generateLargeInDimension(worldIn, doorPos, StructureHelper.STRUCTURE_DIR);
+				hasStructure = generateLargeInDimension(worldIn, doorPos, StructureHelper.STRUCTURE_DIR);
 				break;
 			default: break;
 			}			
 		}
 
 		// set tile entity door information
-		if(ret)
+		if(hasStructure)
 		{
 			doorZ = cornerZ + this.structure.getDoorPosition();
 			BlockPos tepos = new BlockPos(cornerX, StructureHelper.FLOOR_Y + 1, doorZ);
@@ -76,7 +76,7 @@ public class StructureYurt
 				tetd.setPrevDimension(dimensionFrom);
 				// debug:
 				//System.out.println("OverworldXYZ = " + overworldX + "," + overworldY + "," + overworldZ);
-				return ret;
+				return hasStructure;
 			}
 			else System.out.println("Error! Failed to get tile entity at " + tepos);
 		}
