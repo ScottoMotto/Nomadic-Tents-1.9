@@ -1,5 +1,6 @@
 package com.yurtmod.content;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
@@ -48,12 +49,13 @@ public class BlockTepeeWall extends BlockUnbreakable implements ITepeeBlock
 			{
 				// debug:
 				//System.out.println("searched for door. y=" + pos.getY() + ", doorPos=" + doorPos);
+				TileEntityTentDoor te = (TileEntityTentDoor)worldIn.getTileEntity(doorPos);
 				// psuedo-random: hopefully guarantees all blocks on same y are same meta
-				int randSeed = pos.getY() + doorPos.getX() + doorPos.getZ();
+				int randSeed = pos.getY() + doorPos.getX() + doorPos.getZ() + te.getOffsetX() + te.getOffsetZ();
 				metaToSet = getMetaForRandomPattern(new Random(randSeed));
 				worldIn.setBlockState(pos, this.getStateFromMeta(metaToSet), 2);
 			}
-			else if(worldIn.rand.nextInt(Config.TEPEE_DECORATED_RATIO) == 0)
+			else if(worldIn.rand.nextInt(100) < Config.TEPEE_DECORATED_CHANCE)
 			{
 				metaToSet = getMetaForRandomDesign(worldIn.rand);
 				worldIn.setBlockState(pos, this.getStateFromMeta(metaToSet), 2);
