@@ -4,7 +4,7 @@ import com.yurtmod.dimension.StructureHelper;
 import com.yurtmod.dimension.StructureHelper.ITepeeBlock;
 import com.yurtmod.dimension.StructureHelper.IYurtBlock;
 import com.yurtmod.dimension.StructureHelper.StructureType;
-import com.yurtmod.main.Config;
+import com.yurtmod.dimension.TentDimension;
 
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.ITileEntityProvider;
@@ -53,13 +53,13 @@ public class BlockTentDoor extends BlockUnbreakable implements ITileEntityProvid
 			{
 				TileEntityTentDoor teyd = (TileEntityTentDoor) te;
 				StructureType struct = teyd.getStructureType();
-				int dir = dimID == Config.DIMENSION_ID ? StructureHelper.STRUCTURE_DIR : StructureHelper.isValidStructure(worldIn, struct, base);
+				EnumFacing dir = TentDimension.isTentDimension(dimID) ? StructureHelper.STRUCTURE_DIR : StructureHelper.isValidStructure(worldIn, struct, base);
+				if(dir == null) return false;
 				// deconstruct the tent if the player uses a tentHammer on the door (and in overworld and with fully built tent)
-				if(player.getHeldItem(hand) != null && player.getHeldItem(hand).getItem() instanceof ItemMallet && worldIn.provider.getDimension() != Config.DIMENSION_ID)
+				if(player.getHeldItem(hand) != null && player.getHeldItem(hand).getItem() instanceof ItemMallet && worldIn.provider.getDimension() != TentDimension.DIMENSION_ID)
 				{
-					if(dir == -1) return false;
 					// debug:
-					//System.out.println("Player clicked on the door with a tentHammer. dir=" + dir);	
+					System.out.println("Player clicked on the door with a tentHammer. dir=" + dir);	
 					// prepare a tent item to drop
 					ItemStack toDrop = struct.getDropStack(teyd.getOffsetX(), teyd.getOffsetZ());
 					if(toDrop != null)
@@ -76,11 +76,7 @@ public class BlockTentDoor extends BlockUnbreakable implements ITileEntityProvid
 						return true;
 					}	
 				}
-				else
-				{
-					if(dir == -1) return false;
-					else return ((TileEntityTentDoor)te).onPlayerActivate(player);
-				}
+				else return ((TileEntityTentDoor)te).onPlayerActivate(player);
 			}
 			else System.out.println("Error! Failed to retrieve TileEntityTentDoor at " + pos);
 		}

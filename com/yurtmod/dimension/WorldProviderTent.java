@@ -1,22 +1,21 @@
 package com.yurtmod.dimension;
 
-import com.yurtmod.main.Config;
-
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Biomes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.BiomeProviderSingle;
 import net.minecraft.world.chunk.IChunkGenerator;
-import net.minecraft.world.chunk.IChunkProvider;
 
 public class WorldProviderTent extends WorldProvider
-{
+{	
 	@Override
 	public void registerWorldChunkManager()
 	{
-		this.setDimension(Config.DIMENSION_ID);
+		this.worldChunkMgr = new BiomeProviderSingle(TentDimension.BIOME_SKY);
+		this.setDimension(TentDimension.DIMENSION_ID);
 		this.setAllowedSpawnTypes(false, false);
 		this.hasNoSky = false;
 	}
@@ -30,7 +29,7 @@ public class WorldProviderTent extends WorldProvider
 	@Override
 	public BiomeGenBase getBiomeGenForCoords(BlockPos pos)
 	{
-		return Biomes.ocean;
+		return TentDimension.BIOME_SKY;
 	}
 
 	@Override
@@ -42,7 +41,7 @@ public class WorldProviderTent extends WorldProvider
 	@Override
 	public int getRespawnDimension(EntityPlayerMP player)
 	{
-		return Config.DIMENSION_ID;
+		return TentDimension.DIMENSION_ID;
 	}
 
 	@Override
@@ -60,6 +59,6 @@ public class WorldProviderTent extends WorldProvider
 	@Override
 	public DimensionType getDimensionType() 
 	{
-		return DimensionType.OVERWORLD;
+		return TentDimension.TENT_DIMENSION;
 	}
 }

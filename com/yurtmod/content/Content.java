@@ -166,7 +166,7 @@ public class Content
 	private static void register(Block block, ItemBlock ib, String name)
 	{
 		block.setUnlocalizedName(name).setRegistryName(YurtMain.MODID, name);
-		ib.setUnlocalizedName(name).setRegistryName(name);
+		ib.setUnlocalizedName(name).setRegistryName(YurtMain.MODID, name);
 		GameRegistry.register(block);
 		GameRegistry.register(ib);
 	}

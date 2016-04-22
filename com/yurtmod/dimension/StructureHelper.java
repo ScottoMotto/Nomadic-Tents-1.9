@@ -21,7 +21,7 @@ public class StructureHelper
 {
 	public static final int MAX_SQ_WIDTH = 16;
 	public static final int FLOOR_Y = 70;
-	public static final int STRUCTURE_DIR = 3;
+	public static final EnumFacing STRUCTURE_DIR = EnumFacing.EAST;
 	public static interface IYurtBlock {}
 	public static interface ITepeeBlock {}
 	
@@ -70,7 +70,7 @@ public class StructureHelper
 			return stack;
 		}
 		
-		public void applyToTileEntity(EntityPlayer player, ItemStack stack, TileEntityTentDoor te)
+		public static void applyToTileEntity(EntityPlayer player, ItemStack stack, TileEntityTentDoor te)
 		{
 			int offsetx = stack.getTagCompound().getInteger(ItemTent.OFFSET_X);
 			int offsetz = stack.getTagCompound().getInteger(ItemTent.OFFSET_Z);
@@ -107,7 +107,7 @@ public class StructureHelper
 	}
 	
 	/** Handles the structure type to call the correct {@code canSpawnHere} functions. Currently only handles *_SMALL **/
-	public static boolean canSpawnStructureHere(World world, StructureType structure, BlockPos doorBase, int dir)
+	public static boolean canSpawnStructureHere(World world, StructureType structure, BlockPos doorBase, EnumFacing dir)
 	{
 		switch(structure)
 		{
@@ -117,19 +117,19 @@ public class StructureHelper
 		}
 	}
 	
-	/** Handles the structure type to call the correct {@code isValidStructure} functions. Currently only handles *_SMALL **/
-	public static int isValidStructure(World world, StructureType structure, BlockPos doorBase)
+	/** Handles the structure type to call the correct {@code isValidStructure} functions. Currently only handles *_SMALL and may return null **/
+	public static EnumFacing isValidStructure(World world, StructureType structure, BlockPos doorBase)
 	{
 		switch(structure)
 		{
 		case TEPEE_LARGE: case TEPEE_MEDIUM: case TEPEE_SMALL:	return StructureTepee.isValidSmallTepee(world, doorBase);
 		case YURT_LARGE: case YURT_MEDIUM: case YURT_SMALL: 	return StructureYurt.isValidSmallYurt(world, doorBase);
-		default: return -1;
+		default: return null;
 		}
 	}
 	
 	/** Handles the structure type to call the correct {@code generateSmallInOverworld} function **/
-	public static boolean generateSmallStructureOverworld(World world, StructureType structure, BlockPos doorBase, int dir)
+	public static boolean generateSmallStructureOverworld(World world, StructureType structure, BlockPos doorBase, EnumFacing dir)
 	{
 		switch(structure)
 		{
@@ -140,7 +140,7 @@ public class StructureHelper
 	}
 	
 	/** Handles the structure type to call the correct {@code generateSmallInOverworld} function **/
-	public static boolean deleteSmallStructure(World world, StructureType structure, BlockPos doorBase, int dir)
+	public static boolean deleteSmallStructure(World world, StructureType structure, BlockPos doorBase, EnumFacing dir)
 	{
 		switch(structure)
 		{
@@ -165,7 +165,7 @@ public class StructureHelper
 	}
 	
 	/** Fill the locations given by an array {{x1,z1}} with given block and given metadata **/
-	public static void buildLayer(World worldIn, BlockPos door, int dirForward, Block block, int metadata, int[][] coordinates, int numLayers)
+	public static void buildLayer(World worldIn, BlockPos door, EnumFacing dirForward, Block block, int metadata, int[][] coordinates, int numLayers)
 	{
 		for(int layer = 0; layer < numLayers; layer++)
 		{
@@ -180,29 +180,29 @@ public class StructureHelper
 	}
 	
 	/** Call buildLayer using x,y,z for door and specific metadata **/
-	public static void buildLayer(World worldIn, int doorX, int doorY, int doorZ, int dirForward, Block block, int meta, int[][] coordinates, int numLayers)
+	public static void buildLayer(World worldIn, int doorX, int doorY, int doorZ, EnumFacing dirForward, Block block, int meta, int[][] coordinates, int numLayers)
 	{
 		buildLayer(worldIn, new BlockPos(doorX, doorY, doorZ), dirForward, block, meta, coordinates, numLayers);
 	}
 	
 	/** Call buildLayer using x,y,z for door and no specified metadata **/
-	public static void buildLayer(World worldIn, int doorX, int doorY, int doorZ, int dirForward, Block block, int[][] coordinates, int numLayers)
+	public static void buildLayer(World worldIn, int doorX, int doorY, int doorZ, EnumFacing dirForward, Block block, int[][] coordinates, int numLayers)
 	{
 		buildLayer(worldIn, doorX, doorY, doorZ, dirForward, block, 0, coordinates, numLayers);
 	}
 	
 	/** Call buildLayer using BlockPos for door and no specified metadata **/
-	public static void buildLayer(World worldIn, BlockPos door, int dirForward, Block block, int[][] coordinates, int numLayers)
+	public static void buildLayer(World worldIn, BlockPos door, EnumFacing dirForward, Block block, int[][] coordinates, int numLayers)
 	{
 		buildLayer(worldIn, door, dirForward, block, 0, coordinates, numLayers);
 	}
 	
-	public static void build2TepeeLayers(World worldIn, int doorX, int layerY, int doorZ, int dirForward, Block wallBlock, int[][] coordinates)
+	public static void build2TepeeLayers(World worldIn, int doorX, int layerY, int doorZ, EnumFacing dirForward, Block wallBlock, int[][] coordinates)
 	{
 		build2TepeeLayers(worldIn, new BlockPos(doorX, layerY, doorZ), dirForward, wallBlock, coordinates);
 	}
 
-	public static void build2TepeeLayers(World worldIn, BlockPos pos, int dirForward, Block wallBlock, int[][] coordinates)
+	public static void build2TepeeLayers(World worldIn, BlockPos pos, EnumFacing dirForward, Block wallBlock, int[][] coordinates)
 	{
 		int meta = wallBlock instanceof BlockTepeeWall ? BlockTepeeWall.getMetaForRandomPattern(worldIn.rand) : 0;
 		buildLayer(worldIn, pos, dirForward, wallBlock, meta, coordinates, 1);
@@ -270,10 +270,9 @@ public class StructureHelper
 	}
 	
 	/** dirForward 0=SOUTH=z++; 1=WEST=x--; 2=NORTH=z--; 3=EAST=x++ */
-	public static BlockPos getPosFromDoor(BlockPos doorPos, int disForward, int disRight, int directionForward)
+	public static BlockPos getPosFromDoor(BlockPos doorPos, int disForward, int disRight, EnumFacing forward)
 	{
-		EnumFacing forward = EnumFacing.getHorizontal(directionForward);
-		EnumFacing right = EnumFacing.getHorizontal(directionForward).rotateY();
+		EnumFacing right = forward.rotateY();
 		return doorPos.offset(forward, disForward).offset(right, disRight);
 	}
 	

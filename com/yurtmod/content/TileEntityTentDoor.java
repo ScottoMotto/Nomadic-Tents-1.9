@@ -2,14 +2,15 @@ package com.yurtmod.content;
 
 import com.yurtmod.dimension.StructureHelper;
 import com.yurtmod.dimension.StructureHelper.StructureType;
+import com.yurtmod.dimension.TentDimension;
 import com.yurtmod.dimension.TentTeleporter;
-import com.yurtmod.main.Config;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 
 public class TileEntityTentDoor extends TileEntity
 {
@@ -120,12 +121,12 @@ public class TileEntityTentDoor extends TileEntity
 		return new double[] {this.prevX, this.prevY, this.prevZ};
 	}
 
-	private int[] getXYZFromOffsets()
+	private BlockPos getXYZFromOffsets()
 	{
 		int x = this.offsetX * (StructureHelper.MAX_SQ_WIDTH);
 		int y = StructureHelper.FLOOR_Y + 1;
 		int z = this.offsetZ * (StructureHelper.MAX_SQ_WIDTH);
-		return new int[] {x,y,z};
+		return new BlockPos(x,y,z);
 	}
 
 	public boolean onPlayerActivate(EntityPlayer player)
@@ -136,44 +137,38 @@ public class TileEntityTentDoor extends TileEntity
 			MinecraftServer mcServer = player.getServer();
 			EntityPlayerMP playerMP = (EntityPlayerMP)player;
 			// where the corresponding structure is in Tent dimension
-			int[] corners = getXYZFromOffsets();
+			BlockPos corners = getXYZFromOffsets();
 			int dimensionFrom = playerMP.worldObj.provider.getDimension();
 
 			if(playerMP.timeUntilPortal > 0)
 			{
 				playerMP.timeUntilPortal = 10;
 			}
-			else if(playerMP.worldObj.provider.getDimension() != Config.DIMENSION_ID)
+			else if(!TentDimension.isTentDimension(dimensionFrom))
 			{
 				// remember the player's coordinates from the overworld
 				this.setOverworldXYZ(playerMP.posX, playerMP.posY, playerMP.posZ);
 
 				TentTeleporter tel = new TentTeleporter(
-						dimensionFrom, mcServer.worldServerForDimension(Config.DIMENSION_ID), 
-						corners[0], corners[1] - 1, corners[2],
-						this.prevX, this.prevY, this.prevZ, this.structure);
-
-				// teleport the player to Tent Dimension
-				playerMP.timeUntilPortal = 10;	
-				tel.placeInPortal(player, player.rotationYaw); // probably doesn't do it automatically...
-				//mcServer.transferPlayerToDimension(playerMP, Config.DIMENSION_ID, tel);
-				playerMP.changeDimension(Config.DIMENSION_ID); // probably has problems
+						dimensionFrom, mcServer.worldServerForDimension(TentDimension.DIMENSION_ID), 
+						corners, this.prevX, this.prevY, this.prevZ, this.structure);
 				// debug:
 				System.out.print("Created teleporter to Tent Dimension: " + tel.toString());
+				// teleport the player to Tent Dimension
+				playerMP.timeUntilPortal = 10;	
+				mcServer.getPlayerList().transferPlayerToDimension(playerMP, TentDimension.DIMENSION_ID, tel);
 			}
-			else if(playerMP.worldObj.provider.getDimension() == Config.DIMENSION_ID)
+			else if(TentDimension.isTentDimension(dimensionFrom))
 			{
 				TentTeleporter tel = new TentTeleporter(
 						dimensionFrom, mcServer.worldServerForDimension(this.getPrevDimension()), 
-						corners[0], corners[1], corners[2],
-						this.prevX, this.prevY, this.prevZ, this.structure);
-
-				// teleport player to overworld
-				playerMP.timeUntilPortal = 10;
-				tel.placeInPortal(player, player.rotationYaw); // this probably doesn't work...
-				//mcServer.transferPlayerToDimension(playerMP, this.getPrevDimension(), tel);
+						corners, this.prevX, this.prevY, this.prevZ, this.structure);
 				// debug:
 				System.out.print("Created teleporter to Overworld: " + tel.toString());
+				// teleport player to overworld
+				playerMP.timeUntilPortal = 10;
+				mcServer.getPlayerList().transferPlayerToDimension(playerMP, this.getPrevDimension(), tel);
+				
 			}
 			return true;
 		}

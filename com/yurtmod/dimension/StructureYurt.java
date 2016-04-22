@@ -8,6 +8,7 @@ import com.yurtmod.dimension.StructureHelper.StructureType;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -83,13 +84,13 @@ public class StructureYurt
 	}
 
 	/** (Helper function) Warning: does not check canSpawnSmallYurt before generating */
-	public static boolean generateSmallInOverworld(World worldIn, BlockPos doorBase, Block door, int dirForward)
+	public static boolean generateSmallInOverworld(World worldIn, BlockPos doorBase, Block door, EnumFacing dirForward)
 	{
 		return generateSmall(worldIn, doorBase, dirForward, door, Content.yurtWallFrame, Content.yurtRoofFrame, Blocks.air, false);
 	}
 
 	/** Helper function */
-	public static boolean deleteSmall(World worldIn, BlockPos doorBase, int dirForward)
+	public static boolean deleteSmall(World worldIn, BlockPos doorBase, EnumFacing dirForward)
 	{
 		boolean flag = generateSmall(worldIn, doorBase, dirForward, Blocks.air, Blocks.air, Blocks.air, Blocks.air, false);
 		if(worldIn.getTileEntity(doorBase) instanceof TileEntityTentDoor)
@@ -104,13 +105,13 @@ public class StructureYurt
 	}
 	
 	/** (Helper function) Warning: does not check canSpawnSmallYurt before generating */
-	public static boolean generateSmallInDimension(World worldIn, BlockPos doorBase, int dirForward)
+	public static boolean generateSmallInDimension(World worldIn, BlockPos doorBase, EnumFacing dirForward)
 	{
 		return generateSmall(worldIn, doorBase, dirForward, Content.yurtDoorSmall, Content.yurtInnerWall, Content.yurtRoof, Content.barrier, true);
 	}
 	
 	/** Warning: does not check canSpawnSmallYurt before generating */
-	public static boolean generateSmall(World worldIn, BlockPos door, int dirForward, Block doorBlock, Block wallBlock, Block roofBlock, Block barrier, boolean hasNegativeFloor)
+	public static boolean generateSmall(World worldIn, BlockPos door, EnumFacing dirForward, Block doorBlock, Block wallBlock, Block roofBlock, Block barrier, boolean hasNegativeFloor)
 	{	
 		if(!worldIn.isRemote)
 		{
@@ -136,12 +137,12 @@ public class StructureYurt
 	}
 
 	/** Helper function */
-	public static boolean generateMedInDimension(World worldIn, BlockPos doorPos, int dirForward)
+	public static boolean generateMedInDimension(World worldIn, BlockPos doorPos, EnumFacing dirForward)
 	{
 		return generateMedium(worldIn, doorPos, dirForward, Content.yurtInnerWall, Content.yurtRoof, Content.barrier, true);
 	}
 
-	public static boolean generateMedium(World worldIn, BlockPos door, int dirForward, Block wallBlock, Block roofBlock, Block barrier, boolean hasNegativeFloor)
+	public static boolean generateMedium(World worldIn, BlockPos door, EnumFacing dirForward, Block wallBlock, Block roofBlock, Block barrier, boolean hasNegativeFloor)
 	{
 		if(!worldIn.isRemote)
 		{
@@ -169,14 +170,14 @@ public class StructureYurt
 	}
 
 	/** Helper function */
-	public static boolean generateLargeInDimension(World worldIn, BlockPos door, int dirForward)
+	public static boolean generateLargeInDimension(World worldIn, BlockPos door, EnumFacing dirForward)
 	{
 		boolean flag = generateLarge(worldIn, door, dirForward, Content.yurtInnerWall, Content.yurtRoof, Content.barrier, true);
 		StructureHelper.buildFire(worldIn, Blocks.netherrack, door.down(1).east(4));
 		return flag;
 	}
 
-	public static boolean generateLarge(World worldIn, BlockPos door, int dirForward, Block wallBlock, Block roofBlock, Block barrier, boolean hasNegativeFloor)
+	public static boolean generateLarge(World worldIn, BlockPos door, EnumFacing dirForward, Block wallBlock, Block roofBlock, Block barrier, boolean hasNegativeFloor)
 	{
 		if(!worldIn.isRemote)
 		{
@@ -205,7 +206,7 @@ public class StructureYurt
 		return false;
 	}
 
-	public static boolean canSpawnSmallYurt(World worldIn, BlockPos door, int dirForward)
+	public static boolean canSpawnSmallYurt(World worldIn, BlockPos door, EnumFacing dirForward)
 	{
 		BlockPos pos = door;
 		// check outer walls
@@ -238,19 +239,19 @@ public class StructureYurt
 		return true;
 	}
 	
-	/** Returns -1 if not valid. Returns direction if is valid: 0=SOUTH=z++; 1=WEST=x--; 2=NORTH=z--; 3=EAST=x++  */
-	public static int isValidSmallYurt(World worldIn, BlockPos doorBase) 
+	/** Returns null if not valid. Returns direction if is valid */
+	public static EnumFacing isValidSmallYurt(World worldIn, BlockPos doorBase) 
 	{
 		return isValidSmallYurt(worldIn, doorBase.getX(), doorBase.getY(), doorBase.getZ());
 	}
 
-	/** Returns -1 if not valid. Returns direction if is valid: 0=SOUTH=z++; 1=WEST=x--; 2=NORTH=z--; 3=EAST=x++  */
-	public static int isValidSmallYurt(World worldIn, int doorX, int doorY, int doorZ)
+	/** Returns null if not valid. Returns direction if is valid */
+	public static EnumFacing isValidSmallYurt(World worldIn, int doorX, int doorY, int doorZ)
 	{
 		BlockPos door = new BlockPos(doorX, doorY, doorZ);
 		BlockPos pos = door;
 		// check each direction
-		for(int dir = 0; dir < 4; dir++)
+		for(EnumFacing dir : new EnumFacing[] {EnumFacing.NORTH, EnumFacing.EAST, EnumFacing.SOUTH, EnumFacing.WEST})
 		{
 			boolean isValid = true;
 			for(int layer = 0; layer < WALL_HEIGHT; layer++)
@@ -286,6 +287,6 @@ public class StructureYurt
 			// if it passed all the checks, it's a valid yurt
 			if(isValid) return dir;
 		}
-		return -1;
+		return null;
 	}
 }

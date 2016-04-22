@@ -8,6 +8,7 @@ import com.yurtmod.dimension.StructureHelper.StructureType;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -88,12 +89,12 @@ public class StructureTepee
 	}
 	
 	/** (Helper function) Warning: does not check canSpawnSmallTepee before generating */
-	public static boolean generateSmallInOverworld(World worldIn, BlockPos doorBase, Block door, int dirForward)
+	public static boolean generateSmallInOverworld(World worldIn, BlockPos doorBase, Block door, EnumFacing dirForward)
 	{
 		return generateSmall(worldIn, doorBase, dirForward, door, Content.tepeeWallFrame, Blocks.air, false);
 	}
 
-	public static boolean deleteSmall(World worldIn, BlockPos pos, int dirForward)
+	public static boolean deleteSmall(World worldIn, BlockPos pos, EnumFacing dirForward)
 	{
 		boolean flag = generateSmall(worldIn, pos, dirForward, Blocks.air, Blocks.air, Blocks.air, false);
 		if(worldIn.getTileEntity(pos) instanceof TileEntityTentDoor)
@@ -120,7 +121,7 @@ public class StructureTepee
 	}
 	
 	/** Warning: does not check canSpawnSmallYurt before generating */
-	public static boolean generateSmall(World worldIn, BlockPos doorBase, int dirForward, Block doorBlock, Block wallBlock, Block barrier, boolean hasNegativeFloor)
+	public static boolean generateSmall(World worldIn, BlockPos doorBase, EnumFacing dirForward, Block doorBlock, Block wallBlock, Block barrier, boolean hasNegativeFloor)
 	{	
 		if(!worldIn.isRemote)
 		{
@@ -148,7 +149,7 @@ public class StructureTepee
 		return false;
 	}
 	
-	public static boolean generateMedium(World worldIn, BlockPos doorBase, int dirForward, Block doorBlock, Block wallBlock, Block barrier, boolean hasNegativeFloor)
+	public static boolean generateMedium(World worldIn, BlockPos doorBase, EnumFacing dirForward, Block doorBlock, Block wallBlock, Block barrier, boolean hasNegativeFloor)
 	{
 		if(!worldIn.isRemote)
 		{
@@ -176,7 +177,7 @@ public class StructureTepee
 		return false;
 	}
 	
-	public static boolean generateLarge(World worldIn, BlockPos doorBase, int dirForward, Block doorBlock, Block wallBlock, Block barrier, boolean hasNegativeFloor)
+	public static boolean generateLarge(World worldIn, BlockPos doorBase, EnumFacing dirForward, Block doorBlock, Block wallBlock, Block barrier, boolean hasNegativeFloor)
 	{
 		if(!worldIn.isRemote)
 		{
@@ -208,7 +209,7 @@ public class StructureTepee
 		return false;
 	}
 	
-	public static boolean canSpawnSmallTepee(World worldIn, BlockPos door, int dirForward)
+	public static boolean canSpawnSmallTepee(World worldIn, BlockPos door, EnumFacing dirForward)
 	{
 		BlockPos pos = door;
 		// check outer walls
@@ -248,12 +249,12 @@ public class StructureTepee
 		return true;
 	}
 	
-	public static int isValidSmallTepee(World worldIn, BlockPos doorBase)
+	public static EnumFacing isValidSmallTepee(World worldIn, BlockPos doorBase)
 	{
 		BlockPos pos;
 		// check each direction
 		loopCheckDirection:
-		for(int dir = 0; dir < 4; dir++)
+		for(EnumFacing dir : new EnumFacing[] {EnumFacing.NORTH, EnumFacing.EAST, EnumFacing.SOUTH, EnumFacing.WEST})
 		{
 			boolean isValid = true;
 			for(int layer = 0; isValid && layer < LAYER_DEPTH; layer++)
@@ -307,10 +308,10 @@ public class StructureTepee
 			if(isValid) return dir;
 		}
 
-		return -1;
+		return null;
 	}
 
-	public static int isValidSmallTepee(World worldIn, int doorX, int doorBaseY, int doorZ) 
+	public static EnumFacing isValidSmallTepee(World worldIn, int doorX, int doorBaseY, int doorZ) 
 	{
 		return isValidSmallTepee(worldIn, new BlockPos(doorX, doorBaseY, doorZ));	
 	}

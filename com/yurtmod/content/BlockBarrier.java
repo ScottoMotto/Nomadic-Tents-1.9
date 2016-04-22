@@ -10,6 +10,7 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -17,13 +18,28 @@ public class BlockBarrier extends BlockUnbreakable implements IYurtBlock, ITepee
 {
 	public BlockBarrier() 
 	{
-		super(Material.rock);
+		super(Material.barrier);
+		this.setResistance(6000001.0F);
+        this.disableStats();
+        this.translucent = true;
 	}
 	
 	@Override
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
+	 public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
+	{
+		return this.SINGULAR_AABB;
+	}
+	
+	@Override
+	public AxisAlignedBB getSelectedBoundingBox(IBlockState blockState, World worldIn, BlockPos pos)
+   {
+       return this.FULL_BLOCK_AABB;
+   }
+	
+	@Override
+	public boolean isPassable(IBlockAccess worldIn, BlockPos pos)
     {
-        return SINGULAR_AABB;
+        return false;
     }
 	
 	@Override
@@ -64,5 +80,18 @@ public class BlockBarrier extends BlockUnbreakable implements IYurtBlock, ITepee
     public BlockRenderLayer getBlockLayer()
     {
         return BlockRenderLayer.CUTOUT;
+    }
+    
+    @SideOnly(Side.CLIENT)
+    public float getAmbientOcclusionLightValue(IBlockState state)
+    {
+        return 1.0F;
+    }
+
+    /**
+     * Spawns this Block's drops into the World as EntityItems.
+     */
+    public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune)
+    {
     }
 }

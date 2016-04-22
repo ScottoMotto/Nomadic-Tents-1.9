@@ -1,31 +1,27 @@
 package com.yurtmod.dimension;
 
 import com.yurtmod.dimension.StructureHelper.StructureType;
-import com.yurtmod.main.Config;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Teleporter;
 import net.minecraft.world.WorldServer;
 
 public class TentTeleporter extends Teleporter
 {	
 	private StructureType structure;
-	private int yurtCornerX, yurtCornerY, yurtCornerZ;
+	private BlockPos tentCorner;
 	private double prevX, prevY, prevZ;
 	private int prevDimID;
 	private WorldServer worldServer;
 
-
-	public TentTeleporter(int dimensionFrom, WorldServer worldTo, int cornerX, int cornerY, int cornerZ, double oldX, double oldY, double oldZ, StructureType type) 
+	public TentTeleporter(int dimensionFrom, WorldServer worldTo, BlockPos corner, double oldX, double oldY, double oldZ, StructureType type)
 	{
 		super(worldTo);
 		this.prevDimID = dimensionFrom;
 		this.worldServer = worldTo;
-		this.yurtCornerX = cornerX;
-		this.yurtCornerY = cornerY;
-		this.yurtCornerZ = cornerZ;
+		this.tentCorner = corner;
 		this.prevX = oldX;
 		this.prevY = oldY;
 		this.prevZ = oldZ;
@@ -43,23 +39,23 @@ public class TentTeleporter extends Teleporter
 			float yaw;
 			entity.motionX = entity.motionY = entity.motionZ = 0.0D;
 
-			if(worldServer.provider.getDimension() == Config.DIMENSION_ID)
+			if(TentDimension.isTentDimension(worldServer.provider.getDimension()))
 			{	
-				entityX = this.yurtCornerX + 1.5D;
-				entityY = this.yurtCornerY + 1.01D;
-				entityZ = this.yurtCornerZ + this.structure.getDoorPosition() + 0.5D;
+				entityX = this.tentCorner.getX() + 1.0D;
+				entityY = this.tentCorner.getY() + 1.01D;
+				entityZ = this.tentCorner.getZ() + this.structure.getDoorPosition() + 0.5D;
 				yaw = -90F;
 				// try to build a tent in that location (tent should check if it already exists)
 				switch(this.structure)
 				{
 				case YURT_LARGE: case YURT_MEDIUM: case YURT_SMALL:
-					new StructureYurt(this.structure).generateInTentDimension(prevDimID, worldServer, yurtCornerX, yurtCornerZ, prevX, prevY, prevZ);
+					new StructureYurt(this.structure).generateInTentDimension(prevDimID, worldServer, tentCorner.getX(), tentCorner.getZ(), prevX, prevY, prevZ);
 					break;
 				case TEPEE_LARGE: case TEPEE_MEDIUM: case TEPEE_SMALL:
-					new StructureTepee(this.structure).generateInTentDimension(prevDimID, worldServer, yurtCornerX, yurtCornerZ, prevX, prevY, prevZ);
+					new StructureTepee(this.structure).generateInTentDimension(prevDimID, worldServer, tentCorner.getX(), tentCorner.getZ(), prevX, prevY, prevZ);
 					break;
 				default:
-					StructureHelper.generatePlatform(worldServer, yurtCornerX, StructureHelper.FLOOR_Y - 3, yurtCornerZ, 8);
+					StructureHelper.generatePlatform(worldServer, tentCorner.getX(), StructureHelper.FLOOR_Y, tentCorner.getZ(), 8);
 					System.out.println("Error: unhandled structure type resulted in empty platform");
 					break;
 				}
@@ -83,14 +79,14 @@ public class TentTeleporter extends Teleporter
 	
 	public String toString()
 	{
-		String out = "\n[TentTeleporter]\n";
-		out += "structure=" + this.structure + "\n";
-		out += "yurtCornerX=" + this.yurtCornerX + "\n";
-		out += "yurtCornerZ=" + this.yurtCornerZ + "\n";
-		out += "prevX=" + this.prevX + "\n";
-		out += "prevY=" + this.prevY + "\n";
-		out += "prevZ=" + this.prevZ + "\n";
-		out += "prevDimID=" + this.prevDimID + "\n";
+		String out = "\n[TentTeleporter]\n" +
+			"structure=" + this.structure + "\n" +
+			"tentCorner=" + this.tentCorner + "\n" +
+			"prevX=" + this.prevX + "\n" +
+			"prevY=" + this.prevY + "\n" +
+			"prevZ=" + this.prevZ + "\n" +
+			"prevDimID=" + this.prevDimID + "\n" +
+			"nextDimID=" + this.worldServer.provider.getDimension() + "\n"; 
 		return out;
 	}
 }

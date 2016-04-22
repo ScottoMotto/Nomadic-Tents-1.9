@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.yurtmod.dimension.StructureHelper.ITepeeBlock;
+import com.yurtmod.dimension.TentDimension;
 import com.yurtmod.main.Config;
 
 import net.minecraft.block.Block;
@@ -43,7 +44,7 @@ public class BlockTepeeWall extends BlockUnbreakable implements ITepeeBlock
 			// debug:
 			//System.out.println("searched for door. y = " + pos.getY() + ", doorPos = " + (doorPos == null ? "null" : doorPos));
 			//System.out.println("rand seed = " + (doorPos == null ? "null" : (pos.getY() + doorPos.getX() + doorPos.getZ())));
-			if(worldIn.provider.getDimension() != Config.DIMENSION_ID && doorPos != null && (Math.abs(pos.getY() - doorPos.getY()) % 2 == 0))
+			if(!TentDimension.isTentDimension(worldIn.provider.getDimension()) && doorPos != null && (Math.abs(pos.getY() - doorPos.getY()) % 2 == 0))
 			{
 				// debug:
 				//System.out.println("searched for door. y=" + pos.getY() + ", doorPos=" + doorPos);

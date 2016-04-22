@@ -14,8 +14,6 @@ public class Config
 	public static boolean REQUIRE_MORE_CANVAS;
 	public static boolean REQUIRE_MORE_LEATHER;
 	public static boolean REQUIRE_GOLD_BLOCKS;
-	//public static boolean ALLOW_BUILD_TENTS_IN_TENT_DIM;
-	public static int DIMENSION_ID;
 	public static int TEPEE_DECORATED_RATIO;
 
 	private static final String CATEGORY_CRAFTING = "crafting";
@@ -44,12 +42,8 @@ public class Config
 				"When true, the Yurt Wall recipe requires 6 canvas instead of 4");
 		REQUIRE_MORE_LEATHER = config.getBoolean("Require More Leather", CATEGORY_CRAFTING, false, 
 				"When true, the Tepee Wall recipe requires 6 leather instead of 4");
-		DIMENSION_ID = config.getInt("Tent Dimension ID", Configuration.CATEGORY_GENERAL, 68, -255, 255, 
-				"The ID for the Tent Dimension. (Warning: changing this will reset all tents!)");
 		TEPEE_DECORATED_RATIO = config.getInt("Tepee Design Ratio", Configuration.CATEGORY_GENERAL, 3, 1, 64, 
 				"Number of plain Tepee Blocks generated for every decorated tepee block (does not affect horizontal patterns)");
-		//ALLOW_BUILD_TENTS_IN_TENT_DIM = config.getBoolean("Allow Nested Tents", Configuration.CATEGORY_GENERAL, true, 
-		//		"Whether new tents can be built in the Tent Dimension");
 
 		config.save();
 	}

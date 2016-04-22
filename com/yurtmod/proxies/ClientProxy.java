@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.model.ModelLoader;
 
 public class ClientProxy extends CommonProxy 
 {
@@ -25,15 +26,17 @@ public class ClientProxy extends CommonProxy
 		{
 			String modelName = YurtMain.MODID + ":" + StructureType.getName(new ItemStack(Content.itemTent, 1, i));
 			namesTentItem[i] = new ResourceLocation(modelName);
+			ModelLoader.setCustomModelResourceLocation(Content.itemTent, i, new ModelResourceLocation(modelName, "inventory"));
 			// debug:
-			//System.out.println("registering variant with name '" + modelName + "'");
+			System.out.println("registering variant with name '" + modelName + "'");
 		}
 		for(int j = 0; j < BlockTepeeWall.NUM_TEXTURES; j++)
 		{
 			String modelName = Content.ibTepeeWall.getRegistryName() + "_" + j;
 			namesTepeeWall[j] = new ResourceLocation(modelName);
+			ModelLoader.setCustomModelResourceLocation(Content.ibTepeeWall, j, new ModelResourceLocation(modelName));
 			// debug:
-			//System.out.println("registering wall variant with name '" + modelName + "'");
+			System.out.println("registering wall variant with name '" + modelName + "'");
 		}
 		ModelBakery.registerItemVariants(Content.itemTent, namesTentItem);
 		ModelBakery.registerItemVariants(Content.ibTepeeWall, namesTepeeWall);
@@ -81,7 +84,7 @@ public class ClientProxy extends CommonProxy
 		register(Content.ibTepeeWallFrame);
 		
 		// debug:
-		//System.out.println("Finished registering inventory renders with the ItemModelMesher");
+		System.out.println("Finished registering inventory renders with the ItemModelMesher");
 	}
 	
 	private void register(Item i)
