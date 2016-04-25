@@ -3,7 +3,6 @@ package com.yurtmod.dimension;
 import com.yurtmod.content.Content;
 import com.yurtmod.content.TileEntityTentDoor;
 import com.yurtmod.dimension.StructureHelper.IYurtBlock;
-import com.yurtmod.dimension.StructureHelper.StructureType;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -251,7 +250,7 @@ public class StructureYurt
 		BlockPos door = new BlockPos(doorX, doorY, doorZ);
 		BlockPos pos = door;
 		// check each direction
-		for(EnumFacing dir : new EnumFacing[] {EnumFacing.NORTH, EnumFacing.EAST, EnumFacing.SOUTH, EnumFacing.WEST})
+		for(EnumFacing dir : EnumFacing.Plane.HORIZONTAL.facings())
 		{
 			boolean isValid = true;
 			for(int layer = 0; layer < WALL_HEIGHT; layer++)

@@ -1,7 +1,5 @@
 package com.yurtmod.dimension;
 
-import com.yurtmod.dimension.StructureHelper.StructureType;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;

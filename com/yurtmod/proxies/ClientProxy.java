@@ -2,15 +2,13 @@ package com.yurtmod.proxies;
 
 import com.yurtmod.content.BlockTepeeWall;
 import com.yurtmod.content.Content;
-import com.yurtmod.dimension.StructureHelper.StructureType;
+import com.yurtmod.dimension.StructureType;
 import com.yurtmod.main.YurtMain;
 
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 

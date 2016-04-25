@@ -3,12 +3,13 @@ package com.yurtmod.content;
 import java.util.List;
 
 import com.yurtmod.dimension.StructureHelper;
-import com.yurtmod.dimension.StructureHelper.StructureType;
+import com.yurtmod.dimension.StructureType;
 import com.yurtmod.dimension.TentDimension;
 import com.yurtmod.main.TentSaveData;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -51,43 +52,42 @@ public class ItemTent extends Item
 	@Override
 	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
-		// debug:
-		System.out.println("on item right click");
-		pos = pos.up(1);
 		if(!TentDimension.isTentDimension(worldIn.provider.getDimension()) && !worldIn.isRemote)
 		{
 			EnumFacing d = player.getHorizontalFacing();
 			boolean hitTop = facing == EnumFacing.UP;
-			Block clicked = worldIn.getBlockState(pos).getBlock();
+			IBlockState clicked = worldIn.getBlockState(pos);
 			int meta = stack.getItemDamage();
-			if(clicked == Blocks.snow_layer || worldIn.getBlockState(pos).getMaterial() == Material.plants)
+			StructureType type = StructureType.byMetadata(meta);
+			if(clicked.getBlock() == Blocks.snow_layer || clicked.getMaterial() == Material.plants)
 			{
 				hitTop = true;
-				pos.down(1);
+				//pos = pos.down(1);
 				// debug:
-				System.out.println("You clicked on a replaceable material, the tent will replace it.");
+				//System.out.println("You clicked on a replaceable material, the tent will replace it.");
 			}
+			else pos = pos.up(1);
 
 			if(!player.canPlayerEdit(pos, hitTop ? EnumFacing.UP : facing, stack))
 			{
 				// debug:
-				System.out.println("Player cannot edit");
+				//System.out.println("Player cannot edit");
 				return EnumActionResult.FAIL;
 			}
 			else if(hitTop)
 			{
 				// debug:
 				System.out.println("Trying to generate a Tent...");
-				if(StructureHelper.canSpawnStructureHere(worldIn, this.getStructureType(meta), pos, d))
+				if(StructureHelper.canSpawnStructureHere(worldIn, type, pos, d))
 				{
-					Block door = this.getStructureType(meta).getDoorBlock();
-					if(StructureHelper.generateSmallStructureOverworld(worldIn, this.getStructureType(meta), pos, d))
+					Block door = StructureType.byMetadata(meta).getDoorBlock();
+					if(StructureHelper.generateSmallStructureOverworld(worldIn, type, pos, d))
 					{
 						// lower door:
 						TileEntity te = worldIn.getTileEntity(pos);
 						if(te != null && te instanceof TileEntityTentDoor)
 						{
-							this.getStructureType(meta).applyToTileEntity(player, stack, (TileEntityTentDoor)te);
+							StructureType.applyToTileEntity(player, stack, (TileEntityTentDoor)te);
 						}
 						else System.out.println("Error! Failed to retrieve TileEntityTentDoor at " + pos);
 						// remove tent from inventory
@@ -116,9 +116,10 @@ public class ItemTent extends Item
 	@Override
 	public void getSubItems(Item itemIn, CreativeTabs tab, List subItems) 
 	{
-		for(int i = 0, len = StructureType.values().length; i < len; i++)
+		for(StructureType type : StructureType.values())
 		{
-			subItems.add(new ItemStack(itemIn, 1, i));
+			ItemStack tent = type.getDropStack(-1, -1 - type.ordinal());
+			subItems.add(tent);
 		}
 	}
 	
@@ -142,15 +143,10 @@ public class ItemTent extends Item
 		par3List.add(this.getTooltipColor(stack.getItemDamage()) + I18n.translateToLocal("tooltip.extra_dimensional_space"));
 	}
 
-	public StructureType getStructureType(int meta)
-	{
-		return StructureHelper.StructureType.values()[meta % StructureType.values().length];
-	}
-
 	public void adjustSaveData(ItemStack stack, World world, EntityPlayer player)
 	{
 		TentSaveData data = TentSaveData.forWorld(world);
-		StructureType struct = getStructureType(stack.getItemDamage());
+		StructureType struct = StructureType.byMetadata(stack.getItemDamage());
 		stack.getTagCompound().setInteger(OFFSET_Z, struct.getTagOffsetZ());
 		switch(struct)
 		{

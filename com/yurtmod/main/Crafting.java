@@ -1,7 +1,7 @@
 package com.yurtmod.main;
 
 import com.yurtmod.content.Content;
-import com.yurtmod.dimension.StructureHelper;
+import com.yurtmod.dimension.StructureType;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -45,27 +45,27 @@ public class Crafting
 		}
 		if(Config.ALLOW_CRAFT_YURT_SMALL)
 		{
-			GameRegistry.addShapedRecipe(StructureHelper.StructureType.YURT_SMALL.getDropStack(), " F ","F F",'F',Content.itemYurtWall);
+			GameRegistry.addShapedRecipe(StructureType.YURT_SMALL.getDropStack(), " F ","F F",'F',Content.itemYurtWall);
 		}
 		if(Config.ALLOW_CRAFT_YURT_MED)
 		{
-			GameRegistry.addShapedRecipe(StructureHelper.StructureType.YURT_MEDIUM.getDropStack(), " F ","FYF",'F',Content.itemYurtWall,'Y',StructureHelper.StructureType.YURT_SMALL.getDropStack());
+			GameRegistry.addShapedRecipe(StructureType.YURT_MEDIUM.getDropStack(), " F ","FYF",'F',Content.itemYurtWall,'Y',StructureType.YURT_SMALL.getDropStack());
 		}
 		if(Config.ALLOW_CRAFT_YURT_LARGE)
 		{
-			GameRegistry.addShapedRecipe(StructureHelper.StructureType.YURT_LARGE.getDropStack(), " F ","FYF",'F',Content.itemYurtWall,'Y',StructureHelper.StructureType.YURT_MEDIUM.getDropStack());
+			GameRegistry.addShapedRecipe(StructureType.YURT_LARGE.getDropStack(), " F ","FYF",'F',Content.itemYurtWall,'Y',StructureType.YURT_MEDIUM.getDropStack());
 		}
 		if(Config.ALLOW_CRAFT_TEPEE_SMALL)
 		{
-			GameRegistry.addShapedRecipe(StructureHelper.StructureType.TEPEE_SMALL.getDropStack(), " F ","FFF","F F",'F',Content.itemTepeeWall);
+			GameRegistry.addShapedRecipe(StructureType.TEPEE_SMALL.getDropStack(), " F ","FFF","F F",'F',Content.itemTepeeWall);
 		}
 		if(Config.ALLOW_CRAFT_TEPEE_MED)
 		{
-			GameRegistry.addShapedRecipe(StructureHelper.StructureType.TEPEE_MEDIUM.getDropStack(), " F ","FFF","FTF",'F',Content.itemTepeeWall,'T',StructureHelper.StructureType.TEPEE_SMALL.getDropStack());
+			GameRegistry.addShapedRecipe(StructureType.TEPEE_MEDIUM.getDropStack(), " F ","FFF","FTF",'F',Content.itemTepeeWall,'T',StructureType.TEPEE_SMALL.getDropStack());
 		}
 		if(Config.ALLOW_CRAFT_TEPEE_LARGE)
 		{
-			GameRegistry.addShapedRecipe(StructureHelper.StructureType.TEPEE_LARGE.getDropStack(), " F ","FFF","FTF",'F',Content.itemTepeeWall,'T',StructureHelper.StructureType.TEPEE_MEDIUM.getDropStack());
+			GameRegistry.addShapedRecipe(StructureType.TEPEE_LARGE.getDropStack(), " F ","FFF","FTF",'F',Content.itemTepeeWall,'T',StructureType.TEPEE_MEDIUM.getDropStack());
 		}
 	}
 }

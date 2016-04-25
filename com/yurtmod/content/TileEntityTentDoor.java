@@ -1,7 +1,7 @@
 package com.yurtmod.content;
 
 import com.yurtmod.dimension.StructureHelper;
-import com.yurtmod.dimension.StructureHelper.StructureType;
+import com.yurtmod.dimension.StructureType;
 import com.yurtmod.dimension.TentDimension;
 import com.yurtmod.dimension.TentTeleporter;
 

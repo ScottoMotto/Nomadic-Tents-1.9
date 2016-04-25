@@ -14,7 +14,7 @@ public class WorldProviderTent extends WorldProvider
 	@Override
 	public void registerWorldChunkManager()
 	{
-		this.worldChunkMgr = new BiomeProviderSingle(TentDimension.BIOME_SKY);
+		this.worldChunkMgr = new BiomeProviderSingle(Biomes.voidBiome);
 		this.setDimension(TentDimension.DIMENSION_ID);
 		this.setAllowedSpawnTypes(false, false);
 		this.hasNoSky = false;
@@ -29,7 +29,7 @@ public class WorldProviderTent extends WorldProvider
 	@Override
 	public BiomeGenBase getBiomeGenForCoords(BlockPos pos)
 	{
-		return TentDimension.BIOME_SKY;
+		return Biomes.voidBiome;
 	}
 
 	@Override
