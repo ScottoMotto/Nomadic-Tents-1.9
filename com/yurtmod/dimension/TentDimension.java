@@ -1,13 +1,6 @@
 package com.yurtmod.dimension;
 
-import com.yurtmod.main.Config;
-import com.yurtmod.main.YurtMain;
-
 import net.minecraft.world.DimensionType;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.common.BiomeManager;
-import net.minecraftforge.common.BiomeManager.BiomeEntry;
-import net.minecraftforge.common.BiomeManager.BiomeType;
 import net.minecraftforge.common.DimensionManager;
 
 public class TentDimension 

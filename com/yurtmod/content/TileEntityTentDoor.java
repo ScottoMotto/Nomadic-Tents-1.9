@@ -118,9 +118,9 @@ public class TileEntityTentDoor extends TileEntity
 		return this.prevDimID;
 	}
 
-	public double[] getOverworldXYZ()
+	public BlockPos getOverworldXYZ()
 	{
-		return new double[] {this.prevX, this.prevY, this.prevZ};
+		return new BlockPos(this.prevX, this.prevY, this.prevZ);
 	}
 
 	public BlockPos getXYZFromOffsets()

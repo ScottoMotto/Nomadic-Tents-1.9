@@ -13,11 +13,11 @@ import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;
 
-public class TentChunkProvider implements IChunkProvider, IChunkGenerator
+public class TentChunkGenerator implements IChunkGenerator
 {
 	private World worldObj;
 
-	public TentChunkProvider(World worldIn, long dimID, boolean mapFeaturesEnabled)
+	public TentChunkGenerator(World worldIn, long dimID, boolean mapFeaturesEnabled)
 	{
 		worldIn.setSeaLevel(64);
 		this.worldObj = worldIn;
@@ -60,24 +60,6 @@ public class TentChunkProvider implements IChunkProvider, IChunkGenerator
 	public void populate(int x, int z) {}
 	@Override
 	public void recreateStructures(Chunk ch, int x, int z) {}
-
-	@Override
-	public boolean unloadQueuedChunks() 
-	{
-		return false;
-	}
-
-	@Override
-	public String makeString() 
-	{
-		return "RandomLevelSource";
-	}
-
-	@Override
-	public Chunk getLoadedChunk(int x, int z) 
-	{
-		return this.provideChunk(x, z);
-	}
 
 	@Override
 	public BlockPos getStrongholdGen(World worldIn, String p_180513_2_, BlockPos p_180513_3_) 

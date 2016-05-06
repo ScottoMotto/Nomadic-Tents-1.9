@@ -23,7 +23,7 @@ public class WorldProviderTent extends WorldProvider
 	@Override
 	public IChunkGenerator createChunkGenerator()
 	{
-		return new TentChunkProvider(this.worldObj, this.getDimension(), false);
+		return new TentChunkGenerator(this.worldObj, this.getDimension(), false);
 	}
 
 	@Override
