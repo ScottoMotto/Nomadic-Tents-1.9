@@ -133,50 +133,38 @@ public class StructureBedouin
 	/** Warning: does not check canSpawnSmallYurt before generating */
 	public static boolean generateSmall(World worldIn, BlockPos doorBase, EnumFacing dirForward, Block doorBlock, Block wallBlock, Block roofBlock)
 	{	
-		if(!worldIn.isRemote)
-		{
-			StructureHelper.buildLayer(worldIn, doorBase, dirForward, wallBlock, 0, StructureHelper.bedWallsSmall, WALL_HEIGHT);
-			StructureHelper.buildLayer(worldIn, doorBase.up(WALL_HEIGHT), dirForward, roofBlock, 0, StructureHelper.bedRoof1Small, 1);
-			StructureHelper.buildLayer(worldIn, doorBase.up(WALL_HEIGHT + 1), dirForward, roofBlock, 0, StructureHelper.bedRoof2Small, 1);
-			// door
-			worldIn.setBlockState(doorBase, doorBlock.getStateFromMeta(0), 3);
-			worldIn.setBlockState(doorBase.up(1), doorBlock.getStateFromMeta(1), 3);
-			return true;
-		}
-		return false;
+		StructureHelper.buildLayer(worldIn, doorBase, dirForward, wallBlock, 0, StructureHelper.bedWallsSmall, WALL_HEIGHT);
+		StructureHelper.buildLayer(worldIn, doorBase.up(WALL_HEIGHT), dirForward, roofBlock, 0, StructureHelper.bedRoof1Small, 1);
+		StructureHelper.buildLayer(worldIn, doorBase.up(WALL_HEIGHT + 1), dirForward, roofBlock, 0, StructureHelper.bedRoof2Small, 1);
+		// door
+		worldIn.setBlockState(doorBase, doorBlock.getStateFromMeta(0), 3);
+		worldIn.setBlockState(doorBase.up(1), doorBlock.getStateFromMeta(1), 3);
+		return true;
 	}
 
 	public static boolean generateMedium(World worldIn, BlockPos doorBase, EnumFacing dirForward, Block doorBlock, Block wallBlock, Block roofBlock)
 	{
-		if(!worldIn.isRemote)
-		{
-			StructureHelper.buildLayer(worldIn, doorBase, dirForward, wallBlock, 0, StructureHelper.bedWallsMed, WALL_HEIGHT);
-			StructureHelper.buildLayer(worldIn, doorBase.up(WALL_HEIGHT), dirForward, roofBlock, 1, StructureHelper.bedRoof1Med, 1);
-			StructureHelper.buildLayer(worldIn, doorBase.up(WALL_HEIGHT + 1), dirForward, roofBlock, 0, StructureHelper.bedRoof2Med, 1);
-			StructureHelper.buildLayer(worldIn, doorBase.up(WALL_HEIGHT + 2), dirForward, roofBlock, 0, StructureHelper.bedRoof3Med, 1);
-			// make door
-			worldIn.setBlockState(doorBase, doorBlock.getStateFromMeta(0), 3);
-			worldIn.setBlockState(doorBase.up(1), doorBlock.getStateFromMeta(1), 3);
-			return true;
-		}
-		return false;
+		StructureHelper.buildLayer(worldIn, doorBase, dirForward, wallBlock, 0, StructureHelper.bedWallsMed, WALL_HEIGHT);
+		StructureHelper.buildLayer(worldIn, doorBase.up(WALL_HEIGHT), dirForward, roofBlock, 1, StructureHelper.bedRoof1Med, 1);
+		StructureHelper.buildLayer(worldIn, doorBase.up(WALL_HEIGHT + 1), dirForward, roofBlock, 0, StructureHelper.bedRoof2Med, 1);
+		StructureHelper.buildLayer(worldIn, doorBase.up(WALL_HEIGHT + 2), dirForward, roofBlock, 0, StructureHelper.bedRoof3Med, 1);
+		// make door
+		worldIn.setBlockState(doorBase, doorBlock.getStateFromMeta(0), 3);
+		worldIn.setBlockState(doorBase.up(1), doorBlock.getStateFromMeta(1), 3);
+		return true;
 	}
 
 	public static boolean generateLarge(World worldIn, BlockPos doorBase, EnumFacing dirForward, Block doorBlock, Block wallBlock, Block roofBlock)
 	{
-		if(!worldIn.isRemote)
-		{
-			StructureHelper.buildLayer(worldIn, doorBase, dirForward, wallBlock, 0, StructureHelper.bedWallsLarge, WALL_HEIGHT);
-			StructureHelper.buildLayer(worldIn, doorBase.up(WALL_HEIGHT), dirForward, roofBlock, 1, StructureHelper.bedRoof1Large, 1);
-			StructureHelper.buildLayer(worldIn, doorBase.up(WALL_HEIGHT + 1), dirForward, roofBlock, 0, StructureHelper.bedRoof2Large, 1);
-			StructureHelper.buildLayer(worldIn, doorBase.up(WALL_HEIGHT + 2), dirForward, roofBlock, 0, StructureHelper.bedRoof3Large, 1);
-			StructureHelper.buildLayer(worldIn, doorBase.up(WALL_HEIGHT + 3), dirForward, roofBlock, 0, StructureHelper.bedRoof4Large, 1);
-			// make door
-			worldIn.setBlockState(doorBase, doorBlock.getStateFromMeta(0), 3);
-			worldIn.setBlockState(doorBase.up(1), doorBlock.getStateFromMeta(1), 3);
-			return true;
-		}
-		return false;
+		StructureHelper.buildLayer(worldIn, doorBase, dirForward, wallBlock, 0, StructureHelper.bedWallsLarge, WALL_HEIGHT);
+		StructureHelper.buildLayer(worldIn, doorBase.up(WALL_HEIGHT), dirForward, roofBlock, 1, StructureHelper.bedRoof1Large, 1);
+		StructureHelper.buildLayer(worldIn, doorBase.up(WALL_HEIGHT + 1), dirForward, roofBlock, 0, StructureHelper.bedRoof2Large, 1);
+		StructureHelper.buildLayer(worldIn, doorBase.up(WALL_HEIGHT + 2), dirForward, roofBlock, 0, StructureHelper.bedRoof3Large, 1);
+		StructureHelper.buildLayer(worldIn, doorBase.up(WALL_HEIGHT + 3), dirForward, roofBlock, 0, StructureHelper.bedRoof4Large, 1);
+		// make door
+		worldIn.setBlockState(doorBase, doorBlock.getStateFromMeta(0), 3);
+		worldIn.setBlockState(doorBase.up(1), doorBlock.getStateFromMeta(1), 3);
+		return true;
 	}
 
 	public static boolean canSpawnSmallBedouin(World worldIn, BlockPos doorBase, EnumFacing dirForward)

@@ -20,7 +20,7 @@ public class NomadicTents
 {
 	public static final String MODID = "yurtmod";
 	public static final String NAME = "Nomadic Tents";
-	public static final String VERSION = "4.04";
+	public static final String VERSION = "4.07";
 	public static final String MCVERSION = "1.9";
 	
 	@SidedProxy(clientSide = "com." + MODID + ".proxies.ClientProxy", serverSide = "com." + MODID + ".proxies.CommonProxy")

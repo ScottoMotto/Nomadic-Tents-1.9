@@ -82,7 +82,7 @@ public class ItemTent extends Item
 	@Override
 	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
-		if(!TentDimension.isTentDimension(worldIn) && !worldIn.isRemote)
+		if(!TentDimension.isTentDimension(worldIn))
 		{
 			RayTraceResult rtr = this.getMovingObjectPositionFromPlayer(worldIn, player, true);
 

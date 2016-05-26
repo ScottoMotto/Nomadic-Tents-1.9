@@ -14,14 +14,14 @@ import net.minecraft.world.World;
 public class StructureTepee 
 {
 	public static final int LAYER_DEPTH = 2;
-	
+
 	private final StructureType structure;
-		
+
 	public StructureTepee(StructureType type)
 	{
 		this.structure = type;
 	}
-	
+
 	/**
 	 * Allots a space for a sized tepee in the Tent Dimension.
 	 * @param prevDimension the dimension id the player is leaving
@@ -90,7 +90,7 @@ public class StructureTepee
 		StructureHelper.refinePlatform(worldIn, doorBase, StructureHelper.tepeeLayer1Small);
 		return flag;
 	}
-	
+
 	/** (Helper function) Warning: does not check canSpawnSmallTepee before generating */
 	public static boolean generateSmallInOverworld(World worldIn, BlockPos doorBase, Block door, EnumFacing dirForward)
 	{
@@ -141,70 +141,54 @@ public class StructureTepee
 		StructureHelper.refinePlatform(worldIn, doorBase, StructureHelper.tepeeLayer1Large);
 		return flag;
 	}
-	
+
 	/** Warning: does not check canSpawnSmallTepee before generating */
 	public static boolean generateSmall(World worldIn, BlockPos doorBase, EnumFacing dirForward, Block doorBlock, Block wallBlock)
 	{	
-		//if(!worldIn.isRemote)
-		{
-			// make layer 1 and 2
-			StructureHelper.build2TepeeLayers(worldIn, doorBase.up(LAYER_DEPTH * 0), dirForward, wallBlock, StructureHelper.tepeeLayer1Small);
-			// make layer 3 and 4
-			StructureHelper.build2TepeeLayers(worldIn, doorBase.up(LAYER_DEPTH * 1), dirForward, wallBlock, StructureHelper.tepeeLayer2Small);
-			// make layer 5 and 6
-			StructureHelper.build2TepeeLayers(worldIn, doorBase.up(LAYER_DEPTH * 2), dirForward, wallBlock, StructureHelper.tepeeLayer3Small);
-			// make door
-			worldIn.setBlockState(doorBase, doorBlock.getStateFromMeta(0), 3);
-			worldIn.setBlockState(doorBase.up(1), doorBlock.getStateFromMeta(1), 3);
-			return true;
-		}
-		//return false;
+		// make layer 1 and 2
+		StructureHelper.build2TepeeLayers(worldIn, doorBase.up(LAYER_DEPTH * 0), dirForward, wallBlock, StructureHelper.tepeeLayer1Small);
+		// make layer 3 and 4
+		StructureHelper.build2TepeeLayers(worldIn, doorBase.up(LAYER_DEPTH * 1), dirForward, wallBlock, StructureHelper.tepeeLayer2Small);
+		// make layer 5 and 6
+		StructureHelper.build2TepeeLayers(worldIn, doorBase.up(LAYER_DEPTH * 2), dirForward, wallBlock, StructureHelper.tepeeLayer3Small);
+		// make door
+		worldIn.setBlockState(doorBase, doorBlock.getStateFromMeta(0), 3);
+		worldIn.setBlockState(doorBase.up(1), doorBlock.getStateFromMeta(1), 3);
+		return true;
 	}
-	
+
 	public static boolean generateMedium(World worldIn, BlockPos doorBase, EnumFacing dirForward, Block doorBlock, Block wallBlock)
 	{
-		//if(!worldIn.isRemote)
-		{
-			// debug:
-			System.out.println("generating Medium Tepee");
-			// make layer 1 and 2
-			StructureHelper.build2TepeeLayers(worldIn, doorBase.up(LAYER_DEPTH * 0), dirForward, wallBlock, StructureHelper.tepeeLayer1Med);
-			// make layer 3 and 4
-			StructureHelper.build2TepeeLayers(worldIn, doorBase.up(LAYER_DEPTH * 1), dirForward, wallBlock, StructureHelper.tepeeLayer2Med);
-			// make layer 5 and 6
-			StructureHelper.build2TepeeLayers(worldIn, doorBase.up(LAYER_DEPTH * 2), dirForward, wallBlock, StructureHelper.tepeeLayer3Med);
-			// make door
-			worldIn.setBlockState(doorBase, doorBlock.getStateFromMeta(0), 3);
-			worldIn.setBlockState(doorBase.up(1), doorBlock.getStateFromMeta(1), 3);
-			return true;
-		}
-		//return false;
+		// make layer 1 and 2
+		StructureHelper.build2TepeeLayers(worldIn, doorBase.up(LAYER_DEPTH * 0), dirForward, wallBlock, StructureHelper.tepeeLayer1Med);
+		// make layer 3 and 4
+		StructureHelper.build2TepeeLayers(worldIn, doorBase.up(LAYER_DEPTH * 1), dirForward, wallBlock, StructureHelper.tepeeLayer2Med);
+		// make layer 5 and 6
+		StructureHelper.build2TepeeLayers(worldIn, doorBase.up(LAYER_DEPTH * 2), dirForward, wallBlock, StructureHelper.tepeeLayer3Med);
+		// make door
+		worldIn.setBlockState(doorBase, doorBlock.getStateFromMeta(0), 3);
+		worldIn.setBlockState(doorBase.up(1), doorBlock.getStateFromMeta(1), 3);
+		return true;
 	}
-	
+
 	public static boolean generateLarge(World worldIn, BlockPos doorBase, EnumFacing dirForward, Block doorBlock, Block wallBlock)
 	{
-		//if(!worldIn.isRemote)
-		{
-			// debug:
-			System.out.println("generating Large Tepee");
-			// make layer 1 and 2
-			StructureHelper.build2TepeeLayers(worldIn, doorBase.up(LAYER_DEPTH * 0), dirForward, wallBlock, StructureHelper.tepeeLayer1Large);
-			// make layer 3 and 4
-			StructureHelper.build2TepeeLayers(worldIn, doorBase.up(LAYER_DEPTH * 1), dirForward, wallBlock, StructureHelper.tepeeLayer2Large);
-			// make layer 5 and 6
-			StructureHelper.build2TepeeLayers(worldIn, doorBase.up(LAYER_DEPTH * 2), dirForward, wallBlock, StructureHelper.tepeeLayer3Large);
-			// make layer 7 and 8
-			StructureHelper.build2TepeeLayers(worldIn, doorBase.up(LAYER_DEPTH * 3), dirForward, wallBlock, StructureHelper.tepeeLayer4Large);
-			// make layer 7 and 8
-			StructureHelper.build2TepeeLayers(worldIn, doorBase.up(LAYER_DEPTH * 4), dirForward, wallBlock, StructureHelper.tepeeLayer5Large);
-			// make door
-			worldIn.setBlockState(doorBase, doorBlock.getStateFromMeta(0), 3);
-			worldIn.setBlockState(doorBase.up(1), doorBlock.getStateFromMeta(1), 3);
-			return true;
-		}
-		//return false;
+		// make layer 1 and 2
+		StructureHelper.build2TepeeLayers(worldIn, doorBase.up(LAYER_DEPTH * 0), dirForward, wallBlock, StructureHelper.tepeeLayer1Large);
+		// make layer 3 and 4
+		StructureHelper.build2TepeeLayers(worldIn, doorBase.up(LAYER_DEPTH * 1), dirForward, wallBlock, StructureHelper.tepeeLayer2Large);
+		// make layer 5 and 6
+		StructureHelper.build2TepeeLayers(worldIn, doorBase.up(LAYER_DEPTH * 2), dirForward, wallBlock, StructureHelper.tepeeLayer3Large);
+		// make layer 7 and 8
+		StructureHelper.build2TepeeLayers(worldIn, doorBase.up(LAYER_DEPTH * 3), dirForward, wallBlock, StructureHelper.tepeeLayer4Large);
+		// make layer 7 and 8
+		StructureHelper.build2TepeeLayers(worldIn, doorBase.up(LAYER_DEPTH * 4), dirForward, wallBlock, StructureHelper.tepeeLayer5Large);
+		// make door
+		worldIn.setBlockState(doorBase, doorBlock.getStateFromMeta(0), 3);
+		worldIn.setBlockState(doorBase.up(1), doorBlock.getStateFromMeta(1), 3);
+		return true;
 	}
-	
+
 	public static boolean canSpawnSmallTepee(World worldIn, BlockPos door, EnumFacing dirForward)
 	{
 		BlockPos pos = door;
@@ -244,71 +228,66 @@ public class StructureTepee
 		}
 		return true;
 	}
-	
+
 	public static EnumFacing isValidSmallTepee(World worldIn, BlockPos doorBase)
 	{
 		BlockPos pos;
 		// check each direction
 		loopCheckDirection:
-		for(EnumFacing dir : EnumFacing.HORIZONTALS)
-		{
-			boolean isValid = true;
-			for(int layer = 0; isValid && layer < LAYER_DEPTH; layer++)
+			for(EnumFacing dir : EnumFacing.HORIZONTALS)
 			{
+				boolean isValid = true;
+				for(int layer = 0; isValid && layer < LAYER_DEPTH; layer++)
+				{
+					// debug:
+					//System.out.println("Checking layer1 for y = " + (doorBaseY + layer) + " for dir = " + dir + "... isValid = " + isValid);
+					for(int[] coord : StructureHelper.tepeeLayer1Small)
+					{
+						pos = StructureHelper.getPosFromDoor(doorBase, coord[0], coord[1], dir);
+						Block at = worldIn.getBlockState(pos.up(layer)).getBlock();
+						if(isValid && !(at instanceof ITepeeBlock))
+						{
+							isValid = false;
+							continue loopCheckDirection;
+						}
+					}			
+				}
+				for(int layer = 0; isValid && layer < LAYER_DEPTH; layer++)
+				{
+					for(int[] coord : StructureHelper.tepeeLayer2Small)
+					{
+						// debug:
+						//System.out.println("Checking layer2 for y = " + (doorBaseY + layer + LAYER_HEIGHT) + " for dir = " + dir + "... isValid = " + isValid);
+						pos = StructureHelper.getPosFromDoor(doorBase, coord[0], coord[1], dir);
+						Block at = worldIn.getBlockState(pos.up(layer + LAYER_DEPTH)).getBlock();
+						if(isValid && !(at instanceof ITepeeBlock))
+						{
+							isValid = false;
+							continue loopCheckDirection;
+						}
+					}			
+				}
+				for(int layer = 0; isValid && layer < LAYER_DEPTH; layer++)
+				{
+					for(int[] coord : StructureHelper.tepeeLayer3Small)
+					{
+						// debug:
+						//System.out.println("Checking layer2 for y = " + (doorBaseY + layer + LAYER_HEIGHT) + " for dir = " + dir + "... isValid = " + isValid);
+						pos = StructureHelper.getPosFromDoor(doorBase, coord[0], coord[1], dir);
+						Block at = worldIn.getBlockState(pos.up(layer + LAYER_DEPTH * 2)).getBlock();
+						if(isValid && !(at instanceof ITepeeBlock))
+						{
+							isValid = false;
+							continue loopCheckDirection;
+						}
+					}			
+				}
 				// debug:
-				//System.out.println("Checking layer1 for y = " + (doorBaseY + layer) + " for dir = " + dir + "... isValid = " + isValid);
-				for(int[] coord : StructureHelper.tepeeLayer1Small)
-				{
-					pos = StructureHelper.getPosFromDoor(doorBase, coord[0], coord[1], dir);
-					Block at = worldIn.getBlockState(pos.up(layer)).getBlock();
-					if(isValid && !(at instanceof ITepeeBlock))
-					{
-						isValid = false;
-						continue loopCheckDirection;
-					}
-				}			
+				//System.out.println("isValid=" + isValid + "; dir=" + dir);
+				// if it passed all the checks, it's a valid yurt
+				if(isValid) return dir;
 			}
-			for(int layer = 0; isValid && layer < LAYER_DEPTH; layer++)
-			{
-				for(int[] coord : StructureHelper.tepeeLayer2Small)
-				{
-					// debug:
-					//System.out.println("Checking layer2 for y = " + (doorBaseY + layer + LAYER_HEIGHT) + " for dir = " + dir + "... isValid = " + isValid);
-					pos = StructureHelper.getPosFromDoor(doorBase, coord[0], coord[1], dir);
-					Block at = worldIn.getBlockState(pos.up(layer + LAYER_DEPTH)).getBlock();
-					if(isValid && !(at instanceof ITepeeBlock))
-					{
-						isValid = false;
-						continue loopCheckDirection;
-					}
-				}			
-			}
-			for(int layer = 0; isValid && layer < LAYER_DEPTH; layer++)
-			{
-				for(int[] coord : StructureHelper.tepeeLayer3Small)
-				{
-					// debug:
-					//System.out.println("Checking layer2 for y = " + (doorBaseY + layer + LAYER_HEIGHT) + " for dir = " + dir + "... isValid = " + isValid);
-					pos = StructureHelper.getPosFromDoor(doorBase, coord[0], coord[1], dir);
-					Block at = worldIn.getBlockState(pos.up(layer + LAYER_DEPTH * 2)).getBlock();
-					if(isValid && !(at instanceof ITepeeBlock))
-					{
-						isValid = false;
-						continue loopCheckDirection;
-					}
-				}			
-			}
-			// debug:
-			//System.out.println("isValid=" + isValid + "; dir=" + dir);
-			// if it passed all the checks, it's a valid yurt
-			if(isValid) return dir;
-		}
 
 		return null;
-	}
-
-	public static EnumFacing isValidSmallTepee(World worldIn, int doorX, int doorBaseY, int doorZ) 
-	{
-		return isValidSmallTepee(worldIn, new BlockPos(doorX, doorBaseY, doorZ));	
 	}
 }

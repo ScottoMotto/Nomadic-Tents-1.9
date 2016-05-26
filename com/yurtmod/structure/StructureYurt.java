@@ -111,7 +111,7 @@ public class StructureYurt
 		}
 		return flag;
 	}
-	
+
 	/** (Helper function) Warning: does not check canSpawnSmallYurt before generating */
 	public static boolean generateSmallInDimension(World worldIn, BlockPos doorBase)
 	{
@@ -124,22 +124,18 @@ public class StructureYurt
 		StructureHelper.refinePlatform(worldIn, doorBase, StructureHelper.yurtWallsSmall);
 		return flag;
 	}
-	
+
 	/** Warning: does not check canSpawnSmallYurt before generating */
 	public static boolean generateSmall(World worldIn, BlockPos door, EnumFacing dirForward, Block doorBlock, Block wallBlock, Block roofBlock)
 	{	
-		if(!worldIn.isRemote)
-		{
-			// make layer 1
-			StructureHelper.buildLayer(worldIn, door, dirForward, wallBlock, StructureHelper.yurtWallsSmall, WALL_HEIGHT);
-			// make layer 2
-			StructureHelper.buildLayer(worldIn, door.up(WALL_HEIGHT), dirForward, roofBlock, StructureHelper.yurtRoofSmall, 1);
-			// make door
-			worldIn.setBlockState(door, doorBlock.getStateFromMeta(0), 3);
-			worldIn.setBlockState(door.up(1), doorBlock.getStateFromMeta(1), 3);
-			return true;
-		}
-		return false;
+		// make layer 1
+		StructureHelper.buildLayer(worldIn, door, dirForward, wallBlock, StructureHelper.yurtWallsSmall, WALL_HEIGHT);
+		// make layer 2
+		StructureHelper.buildLayer(worldIn, door.up(WALL_HEIGHT), dirForward, roofBlock, StructureHelper.yurtRoofSmall, 1);
+		// make door
+		worldIn.setBlockState(door, doorBlock.getStateFromMeta(0), 3);
+		worldIn.setBlockState(door.up(1), doorBlock.getStateFromMeta(1), 3);
+		return true;
 	}
 
 	/** Helper function */
@@ -156,20 +152,16 @@ public class StructureYurt
 
 	public static boolean generateMedium(World worldIn, BlockPos door, EnumFacing dirForward, Block wallBlock, Block roofBlock)
 	{
-		if(!worldIn.isRemote)
-		{
-			// make layer 1
-			StructureHelper.buildLayer(worldIn, door, dirForward, wallBlock, StructureHelper.yurtWallsMed, WALL_HEIGHT);
-			// make layer 2
-			StructureHelper.buildLayer(worldIn, door.up(WALL_HEIGHT), dirForward, roofBlock, StructureHelper.yurtRoof1Med, 1);
-			// make layer 3
-			StructureHelper.buildLayer(worldIn, door.up(WALL_HEIGHT + 1), dirForward, roofBlock, StructureHelper.yurtRoof2Med, 1);
-			// make door
-			worldIn.setBlockState(door, Content.yurtDoorMed.getStateFromMeta(0), 3);
-			worldIn.setBlockState(door.up(1), Content.yurtDoorMed.getStateFromMeta(1), 3);
-			return true;
-		}
-		return false;
+		// make layer 1
+		StructureHelper.buildLayer(worldIn, door, dirForward, wallBlock, StructureHelper.yurtWallsMed, WALL_HEIGHT);
+		// make layer 2
+		StructureHelper.buildLayer(worldIn, door.up(WALL_HEIGHT), dirForward, roofBlock, StructureHelper.yurtRoof1Med, 1);
+		// make layer 3
+		StructureHelper.buildLayer(worldIn, door.up(WALL_HEIGHT + 1), dirForward, roofBlock, StructureHelper.yurtRoof2Med, 1);
+		// make door
+		worldIn.setBlockState(door, Content.yurtDoorMed.getStateFromMeta(0), 3);
+		worldIn.setBlockState(door.up(1), Content.yurtDoorMed.getStateFromMeta(1), 3);
+		return true;
 	}
 
 	/** Helper function */
@@ -187,22 +179,18 @@ public class StructureYurt
 
 	public static boolean generateLarge(World worldIn, BlockPos door, EnumFacing dirForward, Block wallBlock, Block roofBlock)
 	{
-		if(!worldIn.isRemote)
-		{
-			// make layer 1
-			StructureHelper.buildLayer(worldIn, door, dirForward, wallBlock, StructureHelper.yurtWallsLarge, WALL_HEIGHT);
-			// make layer 2
-			StructureHelper.buildLayer(worldIn, door.up(WALL_HEIGHT), dirForward, roofBlock, StructureHelper.yurtRoof1Large, 1);
-			// make layer 3
-			StructureHelper.buildLayer(worldIn, door.up(WALL_HEIGHT + 1), dirForward, roofBlock, StructureHelper.yurtRoof2Large, 1);
-			// make layer 4
-			StructureHelper.buildLayer(worldIn, door.up(WALL_HEIGHT + 2), dirForward, roofBlock, StructureHelper.yurtRoof3Large, 1);
-			// make door
-			worldIn.setBlockState(door, Content.yurtDoorLarge.getStateFromMeta(0), 3);
-			worldIn.setBlockState(door.up(1), Content.yurtDoorLarge.getStateFromMeta(1), 3);
-			return true;
-		}
-		return false;
+		// make layer 1
+		StructureHelper.buildLayer(worldIn, door, dirForward, wallBlock, StructureHelper.yurtWallsLarge, WALL_HEIGHT);
+		// make layer 2
+		StructureHelper.buildLayer(worldIn, door.up(WALL_HEIGHT), dirForward, roofBlock, StructureHelper.yurtRoof1Large, 1);
+		// make layer 3
+		StructureHelper.buildLayer(worldIn, door.up(WALL_HEIGHT + 1), dirForward, roofBlock, StructureHelper.yurtRoof2Large, 1);
+		// make layer 4
+		StructureHelper.buildLayer(worldIn, door.up(WALL_HEIGHT + 2), dirForward, roofBlock, StructureHelper.yurtRoof3Large, 1);
+		// make door
+		worldIn.setBlockState(door, Content.yurtDoorLarge.getStateFromMeta(0), 3);
+		worldIn.setBlockState(door.up(1), Content.yurtDoorLarge.getStateFromMeta(1), 3);
+		return true;
 	}
 
 	public static boolean canSpawnSmallYurt(World worldIn, BlockPos door, EnumFacing dirForward)
@@ -233,11 +221,11 @@ public class StructureYurt
 		// check last middle piece of roof
 		//if(!StructureHelper.isReplaceableMaterial(worldIn, pos.up(WALL_HEIGHT + 3)))
 		//{
-			//return false;
+		//return false;
 		//}
 		return true;
 	}
-	
+
 	/** Returns null if not valid. Returns direction if is valid */
 	public static EnumFacing isValidSmallYurt(World worldIn, BlockPos doorBase) 
 	{
@@ -251,37 +239,37 @@ public class StructureYurt
 		BlockPos pos = door;
 		// check each direction
 		loopCheckDirection:
-		for(EnumFacing dir : EnumFacing.HORIZONTALS)
-		{
-			boolean isValid = true;
-			for(int layer = 0; layer < WALL_HEIGHT; layer++)
+			for(EnumFacing dir : EnumFacing.HORIZONTALS)
 			{
-				for(int[] coord : StructureHelper.yurtWallsSmall)
+				boolean isValid = true;
+				for(int layer = 0; layer < WALL_HEIGHT; layer++)
+				{
+					for(int[] coord : StructureHelper.yurtWallsSmall)
+					{
+						pos = StructureHelper.getPosFromDoor(door, coord[0], coord[1], dir);
+						Block at = worldIn.getBlockState(pos.up(layer)).getBlock();
+						if(isValid && !(at instanceof IYurtBlock))
+						{
+							isValid = false;
+							continue loopCheckDirection;
+						}
+					}			
+				}
+				// check most of roof
+				for(int[] coord : StructureHelper.yurtRoofSmall)
 				{
 					pos = StructureHelper.getPosFromDoor(door, coord[0], coord[1], dir);
-					Block at = worldIn.getBlockState(pos.up(layer)).getBlock();
+					Block at = worldIn.getBlockState(pos.up(WALL_HEIGHT)).getBlock();
 					if(isValid && !(at instanceof IYurtBlock))
 					{
 						isValid = false;
 						continue loopCheckDirection;
 					}
-				}			
-			}
-			// check most of roof
-			for(int[] coord : StructureHelper.yurtRoofSmall)
-			{
-				pos = StructureHelper.getPosFromDoor(door, coord[0], coord[1], dir);
-				Block at = worldIn.getBlockState(pos.up(WALL_HEIGHT)).getBlock();
-				if(isValid && !(at instanceof IYurtBlock))
-				{
-					isValid = false;
-					continue loopCheckDirection;
 				}
+
+				// if it passed all the checks, it's a valid yurt
+				if(isValid) return dir;
 			}
-			
-			// if it passed all the checks, it's a valid yurt
-			if(isValid) return dir;
-		}
 		return null;
 	}
 }

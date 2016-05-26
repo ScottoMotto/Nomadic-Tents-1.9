@@ -2,7 +2,6 @@ package com.yurtmod.event;
 
 import com.yurtmod.dimension.TentDimension;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;

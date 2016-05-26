@@ -10,7 +10,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 
 public class StructureHelper 
 {
@@ -50,11 +49,6 @@ public class StructureHelper
 	public static boolean generateSmallStructureOverworld(World world, StructureType structure, BlockPos doorBase, EnumFacing dir)
 	{
 		Block door = structure.getDoorBlock();
-		world.scheduleUpdate(doorBase.up(1), door, 2);
-		Chunk c = world.getChunkFromBlockCoords(doorBase);
-		// debug:
-		System.out.println("chunk at coords " + c.xPosition + ", " + c.zPosition + " based on " + doorBase);
-		c.setChunkModified();
 		switch(structure)
 		{
 		case TEPEE_LARGE: case TEPEE_MEDIUM: case TEPEE_SMALL:	return StructureTepee.generateSmallInOverworld(world, doorBase, door, dir);
@@ -99,14 +93,7 @@ public class StructureHelper
 			for(int[] coord : coordinates)
 			{
 				BlockPos pos = getPosFromDoor(door, coord[0], coord[1], dirForward).up(layer);
-				// BUG #4: Client does not get notified of this block change, even with 3 as the flag.
-				worldIn.setBlockState(pos, block.getStateFromMeta(metadata), 2);
-				// try to force blocks to show on client... hoped this would fix bug #4, but no luck
-				//if(!TentDimension.isTentDimension(worldIn))
-				{
-					//worldIn.scheduleUpdate(pos, block, 1 + worldIn.rand.nextInt(10));
-					//worldIn.scheduleBlockUpdate(pos, block, 1 + worldIn.rand.nextInt(20), 0);
-				}
+				worldIn.setBlockState(pos, block.getStateFromMeta(metadata), 3);
 			}
 		}
 	}
