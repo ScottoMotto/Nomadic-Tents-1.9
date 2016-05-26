@@ -1,8 +1,8 @@
-package com.yurtmod.dimension;
+package com.yurtmod.structure;
 
-import com.yurtmod.content.Content;
-import com.yurtmod.content.TileEntityTentDoor;
-import com.yurtmod.dimension.StructureHelper.IYurtBlock;
+import com.yurtmod.block.Categories.IYurtBlock;
+import com.yurtmod.block.TileEntityTentDoor;
+import com.yurtmod.init.Content;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -46,13 +46,13 @@ public class StructureYurt
 			switch(this.structure)
 			{
 			case YURT_SMALL:
-				hasStructure = generateSmallInDimension(worldIn, doorPos, StructureHelper.STRUCTURE_DIR);
+				hasStructure = generateSmallInDimension(worldIn, doorPos);
 				break;
 			case YURT_MEDIUM:
-				hasStructure = generateMedInDimension(worldIn, doorPos, StructureHelper.STRUCTURE_DIR);
+				hasStructure = generateMedInDimension(worldIn, doorPos);
 				break;
 			case YURT_LARGE:
-				hasStructure = generateLargeInDimension(worldIn, doorPos, StructureHelper.STRUCTURE_DIR);
+				hasStructure = generateLargeInDimension(worldIn, doorPos);
 				break;
 			default: break;
 			}			
@@ -85,13 +85,15 @@ public class StructureYurt
 	/** (Helper function) Warning: does not check canSpawnSmallYurt before generating */
 	public static boolean generateSmallInOverworld(World worldIn, BlockPos doorBase, Block door, EnumFacing dirForward)
 	{
-		return generateSmall(worldIn, doorBase, dirForward, door, Content.yurtWallFrame, Content.yurtRoofFrame, Blocks.air, false);
+		boolean flag = generateSmall(worldIn, doorBase, dirForward, door, Content.yurtWallFrame, Content.yurtRoofFrame);
+		return flag;
 	}
 
 	/** Helper function */
 	public static boolean deleteSmall(World worldIn, BlockPos doorBase, EnumFacing dirForward)
 	{
-		boolean flag = generateSmall(worldIn, doorBase, dirForward, Blocks.air, Blocks.air, Blocks.air, Blocks.air, false);
+		boolean flag = generateSmall(worldIn, doorBase, dirForward, Blocks.air, Blocks.air, Blocks.air);
+		// remove TileEntity
 		if(worldIn.getTileEntity(doorBase) instanceof TileEntityTentDoor)
 		{
 			worldIn.removeTileEntity(doorBase);
@@ -100,33 +102,38 @@ public class StructureYurt
 		{
 			worldIn.removeTileEntity(doorBase.up(1));
 		}
+		// remove barrier if found
+		BlockPos pos = StructureHelper.getPosFromDoor(doorBase, StructureHelper.yurtBarrierSmall[0], StructureHelper.yurtBarrierSmall[1], StructureHelper.STRUCTURE_DIR);
+		pos = pos.up(WALL_HEIGHT + 1);
+		if(worldIn.getBlockState(pos).getBlock() == Content.barrier)
+		{
+			worldIn.setBlockToAir(pos);
+		}
 		return flag;
 	}
 	
 	/** (Helper function) Warning: does not check canSpawnSmallYurt before generating */
-	public static boolean generateSmallInDimension(World worldIn, BlockPos doorBase, EnumFacing dirForward)
+	public static boolean generateSmallInDimension(World worldIn, BlockPos doorBase)
 	{
-		return generateSmall(worldIn, doorBase, dirForward, Content.yurtDoorSmall, Content.yurtInnerWall, Content.yurtRoof, Content.barrier, true);
+		boolean flag = generateSmall(worldIn, doorBase, StructureHelper.STRUCTURE_DIR, Content.yurtDoorSmall, Content.yurtInnerWall, Content.yurtRoof);
+		// place barrier block
+		BlockPos pos = StructureHelper.getPosFromDoor(doorBase, StructureHelper.yurtBarrierSmall[0], StructureHelper.yurtBarrierSmall[1], StructureHelper.STRUCTURE_DIR);
+		// add last middle piece of roof
+		worldIn.setBlockState(pos.up(WALL_HEIGHT + 1), Content.barrier.getDefaultState());
+		// refine platform
+		StructureHelper.refinePlatform(worldIn, doorBase, StructureHelper.yurtWallsSmall);
+		return flag;
 	}
 	
 	/** Warning: does not check canSpawnSmallYurt before generating */
-	public static boolean generateSmall(World worldIn, BlockPos door, EnumFacing dirForward, Block doorBlock, Block wallBlock, Block roofBlock, Block barrier, boolean hasNegativeFloor)
+	public static boolean generateSmall(World worldIn, BlockPos door, EnumFacing dirForward, Block doorBlock, Block wallBlock, Block roofBlock)
 	{	
 		if(!worldIn.isRemote)
 		{
 			// make layer 1
 			StructureHelper.buildLayer(worldIn, door, dirForward, wallBlock, StructureHelper.yurtWallsSmall, WALL_HEIGHT);
 			// make layer 2
-			StructureHelper.buildLayer(worldIn, door.up(WALL_HEIGHT), dirForward, roofBlock, StructureHelper.yurtRoof1Small, 1);
-			// place barrier block
-			BlockPos pos = StructureHelper.getPosFromDoor(door, StructureHelper.yurtBarrierSmall[0], StructureHelper.yurtBarrierSmall[1], dirForward);
-			// add last middle piece of roof
-			worldIn.setBlockState(pos.up(WALL_HEIGHT + 1), barrier.getDefaultState());
-			// refine platform
-			if(hasNegativeFloor)
-			{
-				StructureHelper.refinePlatform(worldIn, door, StructureHelper.yurtWallsSmall);
-			}
+			StructureHelper.buildLayer(worldIn, door.up(WALL_HEIGHT), dirForward, roofBlock, StructureHelper.yurtRoofSmall, 1);
 			// make door
 			worldIn.setBlockState(door, doorBlock.getStateFromMeta(0), 3);
 			worldIn.setBlockState(door.up(1), doorBlock.getStateFromMeta(1), 3);
@@ -136,12 +143,18 @@ public class StructureYurt
 	}
 
 	/** Helper function */
-	public static boolean generateMedInDimension(World worldIn, BlockPos doorPos, EnumFacing dirForward)
+	public static boolean generateMedInDimension(World worldIn, BlockPos doorPos)
 	{
-		return generateMedium(worldIn, doorPos, dirForward, Content.yurtInnerWall, Content.yurtRoof, Content.barrier, true);
+		boolean flag = generateMedium(worldIn, doorPos, StructureHelper.STRUCTURE_DIR, Content.yurtInnerWall, Content.yurtRoof);
+		// place barrier block
+		BlockPos pos = StructureHelper.getPosFromDoor(doorPos, StructureHelper.yurtBarrierMed[0], StructureHelper.yurtBarrierMed[1], StructureHelper.STRUCTURE_DIR);
+		worldIn.setBlockState(pos.up(WALL_HEIGHT + 2), Content.barrier.getDefaultState());
+		// refine platform
+		StructureHelper.refinePlatform(worldIn, doorPos, StructureHelper.yurtWallsMed);
+		return flag;
 	}
 
-	public static boolean generateMedium(World worldIn, BlockPos door, EnumFacing dirForward, Block wallBlock, Block roofBlock, Block barrier, boolean hasNegativeFloor)
+	public static boolean generateMedium(World worldIn, BlockPos door, EnumFacing dirForward, Block wallBlock, Block roofBlock)
 	{
 		if(!worldIn.isRemote)
 		{
@@ -151,15 +164,6 @@ public class StructureYurt
 			StructureHelper.buildLayer(worldIn, door.up(WALL_HEIGHT), dirForward, roofBlock, StructureHelper.yurtRoof1Med, 1);
 			// make layer 3
 			StructureHelper.buildLayer(worldIn, door.up(WALL_HEIGHT + 1), dirForward, roofBlock, StructureHelper.yurtRoof2Med, 1);
-			// place barrier block
-			BlockPos pos = StructureHelper.getPosFromDoor(door, StructureHelper.yurtBarrierMed[0], StructureHelper.yurtBarrierMed[1], dirForward);
-			// add last middle piece of roof
-			worldIn.setBlockState(pos.up(WALL_HEIGHT + 2), barrier.getDefaultState());
-			// refine platform
-			if(hasNegativeFloor)
-			{
-				StructureHelper.refinePlatform(worldIn, door, StructureHelper.yurtWallsMed);
-			}
 			// make door
 			worldIn.setBlockState(door, Content.yurtDoorMed.getStateFromMeta(0), 3);
 			worldIn.setBlockState(door.up(1), Content.yurtDoorMed.getStateFromMeta(1), 3);
@@ -169,14 +173,19 @@ public class StructureYurt
 	}
 
 	/** Helper function */
-	public static boolean generateLargeInDimension(World worldIn, BlockPos door, EnumFacing dirForward)
+	public static boolean generateLargeInDimension(World worldIn, BlockPos door)
 	{
-		boolean flag = generateLarge(worldIn, door, dirForward, Content.yurtInnerWall, Content.yurtRoof, Content.barrier, true);
+		boolean flag = generateLarge(worldIn, door, StructureHelper.STRUCTURE_DIR, Content.yurtInnerWall, Content.yurtRoof);
 		StructureHelper.buildFire(worldIn, Blocks.netherrack, door.down(1).east(4));
+		// place barrier block
+		BlockPos pos = StructureHelper.getPosFromDoor(door, StructureHelper.yurtBarrierLarge[0], StructureHelper.yurtBarrierLarge[1], StructureHelper.STRUCTURE_DIR);
+		worldIn.setBlockState(pos.up(WALL_HEIGHT + 3), Content.barrier.getDefaultState());
+		// refine platform
+		StructureHelper.refinePlatform(worldIn, door, StructureHelper.yurtWallsLarge);
 		return flag;
 	}
 
-	public static boolean generateLarge(World worldIn, BlockPos door, EnumFacing dirForward, Block wallBlock, Block roofBlock, Block barrier, boolean hasNegativeFloor)
+	public static boolean generateLarge(World worldIn, BlockPos door, EnumFacing dirForward, Block wallBlock, Block roofBlock)
 	{
 		if(!worldIn.isRemote)
 		{
@@ -188,15 +197,6 @@ public class StructureYurt
 			StructureHelper.buildLayer(worldIn, door.up(WALL_HEIGHT + 1), dirForward, roofBlock, StructureHelper.yurtRoof2Large, 1);
 			// make layer 4
 			StructureHelper.buildLayer(worldIn, door.up(WALL_HEIGHT + 2), dirForward, roofBlock, StructureHelper.yurtRoof3Large, 1);
-			// place barrier block
-			BlockPos pos = StructureHelper.getPosFromDoor(door, StructureHelper.yurtBarrierLarge[0], StructureHelper.yurtBarrierLarge[1], dirForward);
-			// add last middle piece of roof
-			worldIn.setBlockState(pos.up(WALL_HEIGHT + 3), barrier.getDefaultState());
-			// refine platform
-			if(hasNegativeFloor)
-			{
-				StructureHelper.refinePlatform(worldIn, door, StructureHelper.yurtWallsLarge);
-			}
 			// make door
 			worldIn.setBlockState(door, Content.yurtDoorLarge.getStateFromMeta(0), 3);
 			worldIn.setBlockState(door.up(1), Content.yurtDoorLarge.getStateFromMeta(1), 3);
@@ -221,7 +221,7 @@ public class StructureYurt
 			}
 		}
 		// check most of roof
-		for(int[] coord : StructureHelper.yurtRoof1Small)
+		for(int[] coord : StructureHelper.yurtRoofSmall)
 		{
 			pos = StructureHelper.getPosFromDoor(door, coord[0], coord[1], dirForward);
 			if(!StructureHelper.isReplaceableMaterial(worldIn, pos.up(WALL_HEIGHT)))
@@ -231,10 +231,10 @@ public class StructureYurt
 		}
 		pos = StructureHelper.getPosFromDoor(door, StructureHelper.yurtBarrierLarge[0], StructureHelper.yurtBarrierLarge[1], dirForward);
 		// check last middle piece of roof
-		if(!StructureHelper.isReplaceableMaterial(worldIn, pos.up(WALL_HEIGHT + 3)))
-		{
-			return false;
-		}
+		//if(!StructureHelper.isReplaceableMaterial(worldIn, pos.up(WALL_HEIGHT + 3)))
+		//{
+			//return false;
+		//}
 		return true;
 	}
 	
@@ -250,7 +250,8 @@ public class StructureYurt
 		BlockPos door = new BlockPos(doorX, doorY, doorZ);
 		BlockPos pos = door;
 		// check each direction
-		for(EnumFacing dir : EnumFacing.Plane.HORIZONTAL.facings())
+		loopCheckDirection:
+		for(EnumFacing dir : EnumFacing.HORIZONTALS)
 		{
 			boolean isValid = true;
 			for(int layer = 0; layer < WALL_HEIGHT; layer++)
@@ -262,27 +263,22 @@ public class StructureYurt
 					if(isValid && !(at instanceof IYurtBlock))
 					{
 						isValid = false;
+						continue loopCheckDirection;
 					}
 				}			
 			}
 			// check most of roof
-			for(int[] coord : StructureHelper.yurtRoof1Small)
+			for(int[] coord : StructureHelper.yurtRoofSmall)
 			{
 				pos = StructureHelper.getPosFromDoor(door, coord[0], coord[1], dir);
 				Block at = worldIn.getBlockState(pos.up(WALL_HEIGHT)).getBlock();
 				if(isValid && !(at instanceof IYurtBlock))
 				{
 					isValid = false;
+					continue loopCheckDirection;
 				}
 			}
-			// check the last bit of roof
-			//pos = StructureHelper.getPosFromDoor(door, StructureHelper.yurtBarrierSmall[0], StructureHelper.yurtBarrierSmall[1], dir);
-			//Block at = worldIn.getBlockState(pos.up(WALL_HEIGHT + 1)).getBlock();
-			//if(isValid && !(at instanceof IYurtBlock))
-			//{
-			//	isValid = false;
-			//}
-
+			
 			// if it passed all the checks, it's a valid yurt
 			if(isValid) return dir;
 		}

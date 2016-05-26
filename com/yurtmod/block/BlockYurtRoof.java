@@ -1,6 +1,6 @@
-package com.yurtmod.content;
+package com.yurtmod.block;
 
-import com.yurtmod.dimension.StructureHelper.IYurtBlock;
+import com.yurtmod.block.Categories.IYurtBlock;
 
 import net.minecraft.block.material.Material;
 

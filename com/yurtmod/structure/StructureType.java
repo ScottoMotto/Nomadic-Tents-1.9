@@ -1,14 +1,14 @@
-package com.yurtmod.dimension;
+package com.yurtmod.structure;
 
-import com.yurtmod.content.Content;
-import com.yurtmod.content.ItemTent;
-import com.yurtmod.content.TileEntityTentDoor;
+import com.yurtmod.block.TileEntityTentDoor;
+import com.yurtmod.init.Content;
+import com.yurtmod.item.ItemTent;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.text.TextFormatting;
 
 public enum StructureType
 {
@@ -17,7 +17,10 @@ public enum StructureType
 	YURT_LARGE(9, 4),
 	TEPEE_SMALL(5, 2),
 	TEPEE_MEDIUM(7, 3),
-	TEPEE_LARGE(9, 4);
+	TEPEE_LARGE(9, 4),
+	BEDOUIN_SMALL(5, 2),
+	BEDOUIN_MEDIUM(7, 3),
+	BEDOUIN_LARGE(9, 4);
 	
 	private int squareWidth;
 	private int doorOffsetZ;
@@ -82,17 +85,31 @@ public enum StructureType
 		case TEPEE_SMALL: 	return Content.tepeeDoorSmall;
 		case TEPEE_MEDIUM: 	return Content.tepeeDoorMed;
 		case TEPEE_LARGE: 	return Content.tepeeDoorLarge;
-		default:			return Blocks.air;
+		case BEDOUIN_SMALL:	return Content.bedDoorSmall;
+		case BEDOUIN_MEDIUM:return Content.bedDoorMed;
+		case BEDOUIN_LARGE:	return Content.bedDoorLarge;
 		}
-	}	/** @return the Z-offset of this structure type in the Tent Dimension **/
+		return null;
+	}	
+	
+	/** @return the Z-offset of this structure type in the Tent Dimension **/
 	public int getTagOffsetZ()
 	{
 		return this.ordinal();
 	}
 	
-	public static StructureType byMetadata(int i)
+	public TextFormatting getTooltipColor()
 	{
-		return StructureType.values()[i];
+		switch(this)
+		{
+		case YURT_SMALL: case TEPEE_SMALL: case BEDOUIN_SMALL:		
+			return TextFormatting.RED;
+		case YURT_MEDIUM: case TEPEE_MEDIUM: case BEDOUIN_MEDIUM:	
+			return TextFormatting.BLUE;
+		case YURT_LARGE: case TEPEE_LARGE: case BEDOUIN_LARGE:
+			return TextFormatting.GREEN;
+		}
+		return TextFormatting.GRAY;
 	}
 	
 	public static String getName(ItemStack stack)
@@ -103,5 +120,10 @@ public enum StructureType
 	public static String getName(int metadata)
 	{
 		return StructureType.values()[metadata].toString().toLowerCase();
+	}
+	
+	public static StructureType get(int meta)
+	{
+		return StructureType.values()[meta % StructureType.values().length];
 	}
 }

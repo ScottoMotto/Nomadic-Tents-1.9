@@ -1,10 +1,12 @@
-package com.yurtmod.content;
+package com.yurtmod.block;
 
-import com.yurtmod.dimension.StructureHelper;
-import com.yurtmod.dimension.StructureHelper.ITepeeBlock;
-import com.yurtmod.dimension.StructureHelper.IYurtBlock;
-import com.yurtmod.dimension.StructureType;
+import com.yurtmod.block.Categories.IBedouinBlock;
+import com.yurtmod.block.Categories.ITepeeBlock;
+import com.yurtmod.block.Categories.IYurtBlock;
 import com.yurtmod.dimension.TentDimension;
+import com.yurtmod.item.ItemMallet;
+import com.yurtmod.structure.StructureHelper;
+import com.yurtmod.structure.StructureType;
 
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.ITileEntityProvider;
@@ -22,7 +24,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class BlockTentDoor extends BlockUnbreakable implements ITileEntityProvider, ITepeeBlock, IYurtBlock
+public class BlockTentDoor extends BlockUnbreakable implements ITileEntityProvider, ITepeeBlock, IYurtBlock, IBedouinBlock
 {
 	public final int DECONSTRUCT_DAMAGE = 5;
 
@@ -48,18 +50,15 @@ public class BlockTentDoor extends BlockUnbreakable implements ITileEntityProvid
 			int meta = this.getMetaFromState(state);
 			BlockPos base = meta % 4 == 0 ? pos : pos.down(1);
 			TileEntity te = worldIn.getTileEntity(base);
-			int dimID = worldIn.provider.getDimension();
 			if(te != null && te instanceof TileEntityTentDoor)
 			{
 				TileEntityTentDoor teyd = (TileEntityTentDoor) te;
 				StructureType struct = teyd.getStructureType();
-				EnumFacing dir = TentDimension.isTentDimension(dimID) ? StructureHelper.STRUCTURE_DIR : StructureHelper.isValidStructure(worldIn, struct, base);
+				EnumFacing dir = TentDimension.isTentDimension(worldIn) ? StructureHelper.STRUCTURE_DIR : StructureHelper.isValidStructure(worldIn, struct, base);
 				if(dir == null) return false;
 				// deconstruct the tent if the player uses a tentHammer on the door (and in overworld and with fully built tent)
 				if(player.getHeldItem(hand) != null && player.getHeldItem(hand).getItem() instanceof ItemMallet && worldIn.provider.getDimension() != TentDimension.DIMENSION_ID)
 				{
-					// debug:
-					System.out.println("Player clicked on the door with a tentHammer. dir=" + dir);	
 					// prepare a tent item to drop
 					ItemStack toDrop = struct.getDropStack(teyd.getOffsetX(), teyd.getOffsetZ());
 					if(toDrop != null)

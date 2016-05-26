@@ -1,4 +1,4 @@
-package com.yurtmod.main;
+package com.yurtmod.init;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -13,12 +13,18 @@ public class TentSaveData extends WorldSavedData
 	private static final String KEY_SMALL_TEPEE = "CraftCountSmallTepee";
 	private static final String KEY_MEDIUM_TEPEE = "CraftCountMediumTepee";
 	private static final String KEY_LARGE_TEPEE = "CraftCountLargeTepee";
+	private static final String KEY_SMALL_BEDOUIN = "CraftCountSmallBedouin";
+	private static final String KEY_MEDIUM_BEDOUIN = "CraftCountMediumBedouin";
+	private static final String KEY_LARGE_BEDOUIN = "CraftCountLargeBedouin";
 	private int craftcountYurtSmall;
 	private int craftcountYurtMed;
 	private int craftcountYurtLarge;
 	private int craftcountTepeeSmall;
 	private int craftcountTepeeMed;
 	private int craftcountTepeeLarge;
+	private int craftcountBedouinSmall;
+	private int craftcountBedouinMed;
+	private int craftcountBedouinLarge;
 	
 	public TentSaveData(String s) 
 	{
@@ -28,10 +34,11 @@ public class TentSaveData extends WorldSavedData
 	public static TentSaveData forWorld(World world) 
 	{
 	      MapStorage storage = world.getPerWorldStorage();
-	      TentSaveData result = (TentSaveData)storage.loadData(TentSaveData.class, YurtMain.MODID);
-	      if (result == null) {
-	         result = new TentSaveData(YurtMain.MODID);
-	         storage.setData(YurtMain.MODID, result);
+	      TentSaveData result = (TentSaveData)storage.loadData(TentSaveData.class, NomadicTents.MODID);
+	      if (result == null) 
+	      {
+	         result = new TentSaveData(NomadicTents.MODID);
+	         storage.setData(NomadicTents.MODID, result);
 	      }
 	      return result;
 	   }
@@ -45,6 +52,9 @@ public class TentSaveData extends WorldSavedData
 		craftcountTepeeSmall = nbt.getInteger(KEY_SMALL_TEPEE);
 		craftcountTepeeMed = nbt.getInteger(KEY_MEDIUM_TEPEE);
 		craftcountTepeeLarge = nbt.getInteger(KEY_LARGE_TEPEE);
+		craftcountBedouinSmall = nbt.getInteger(KEY_SMALL_BEDOUIN);
+		craftcountBedouinMed = nbt.getInteger(KEY_MEDIUM_BEDOUIN);
+		craftcountBedouinLarge = nbt.getInteger(KEY_LARGE_BEDOUIN);
 	}
 
 	@Override
@@ -56,6 +66,9 @@ public class TentSaveData extends WorldSavedData
 		nbt.setInteger(KEY_SMALL_TEPEE, craftcountTepeeSmall);
 		nbt.setInteger(KEY_MEDIUM_TEPEE, craftcountTepeeMed);
 		nbt.setInteger(KEY_LARGE_TEPEE, craftcountTepeeLarge);
+		nbt.setInteger(KEY_SMALL_BEDOUIN, craftcountBedouinSmall);
+		nbt.setInteger(KEY_MEDIUM_BEDOUIN, craftcountBedouinMed);
+		nbt.setInteger(KEY_LARGE_BEDOUIN, craftcountBedouinLarge);
 	}
 	
 	public void setCountYurtSmall(int toSet)
@@ -91,6 +104,24 @@ public class TentSaveData extends WorldSavedData
 	public void setCountTepeeLarge(int toSet)
 	{
 		this.craftcountTepeeLarge = toSet;
+		this.markDirty();
+	}
+	
+	public void setCountBedouinSmall(int toSet)
+	{
+		this.craftcountBedouinSmall = toSet;
+		this.markDirty();
+	}
+	
+	public void setCountBedouinMed(int toSet)
+	{
+		this.craftcountBedouinMed = toSet;
+		this.markDirty();
+	}
+	
+	public void setCountBedouinLarge(int toSet)
+	{
+		this.craftcountBedouinLarge = toSet;
 		this.markDirty();
 	}
 	
@@ -130,6 +161,24 @@ public class TentSaveData extends WorldSavedData
 		this.markDirty();
 	}
 	
+	public void addCountBedouinSmall(int toAdd)
+	{
+		this.craftcountBedouinSmall += toAdd;
+		this.markDirty();
+	}
+	
+	public void addCountBedouinMed(int toAdd)
+	{
+		this.craftcountBedouinMed += toAdd;
+		this.markDirty();
+	}
+	
+	public void addCountBedouinLarge(int toAdd)
+	{
+		this.craftcountBedouinLarge += toAdd;
+		this.markDirty();
+	}
+	
 	public int getCountYurtSmall()
 	{
 		return this.craftcountYurtSmall;
@@ -158,6 +207,21 @@ public class TentSaveData extends WorldSavedData
 	public int getCountTepeeLarge()
 	{
 		return this.craftcountTepeeLarge;
+	}
+	
+	public int getCountBedouinSmall()
+	{
+		return this.craftcountBedouinSmall;
+	}
+	
+	public int getCountBedouinMed()
+	{
+		return this.craftcountBedouinMed;
+	}
+	
+	public int getCountBedouinLarge()
+	{
+		return this.craftcountBedouinLarge;
 	}
 	
 	public String toString()

@@ -1,7 +1,8 @@
-package com.yurtmod.content;
+package com.yurtmod.block;
 
-import com.yurtmod.dimension.StructureHelper.ITepeeBlock;
-import com.yurtmod.dimension.StructureHelper.IYurtBlock;
+import com.yurtmod.block.Categories.IBedouinBlock;
+import com.yurtmod.block.Categories.ITepeeBlock;
+import com.yurtmod.block.Categories.IYurtBlock;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -14,7 +15,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockBarrier extends BlockUnbreakable implements IYurtBlock, ITepeeBlock
+public class BlockBarrier extends BlockUnbreakable implements IYurtBlock, ITepeeBlock, IBedouinBlock
 {
 	public BlockBarrier() 
 	{

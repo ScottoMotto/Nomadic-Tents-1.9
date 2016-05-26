@@ -1,13 +1,13 @@
-package com.yurtmod.main;
+package com.yurtmod.init;
 
-import com.yurtmod.content.Content;
-import com.yurtmod.dimension.StructureType;
+import com.yurtmod.structure.StructureType;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class Crafting 
 {
@@ -19,24 +19,28 @@ public class Crafting
 		if(Config.REQUIRE_MORE_CANVAS)
 		{
 			// 6 canvas recipe
-			GameRegistry.addShapedRecipe(new ItemStack(Content.itemYurtWall, 1), "FSF","FSF","FSF",'F',Content.itemTentCanvas,'S',Items.stick);
+			GameRegistry.addShapedRecipe(new ItemStack(Content.itemYurtWall, Config.NUM_YURT_WALL_OUTPUT), "FSF","FSF","FSF",'F',Content.itemTentCanvas,'S',Items.stick);
 		}
 		else
 		{
 			// 4 canvas recipe
-			GameRegistry.addShapedRecipe(new ItemStack(Content.itemYurtWall, 1), "FSF","FSF",'F',Content.itemTentCanvas,'S',Items.stick);
+			GameRegistry.addShapedRecipe(new ItemStack(Content.itemYurtWall, Config.NUM_YURT_WALL_OUTPUT), "FSF","FSF",'F',Content.itemTentCanvas,'S',Items.stick);
 		}
 		// tepee wall
+		GameRegistry.addShapedRecipe(new ItemStack(Content.itemTepeeWall, Config.NUM_TEPEE_WALL_OUTPUT_RABBIT), "FSF","FSF","FSF",'F',Items.rabbit_hide,'S',Items.stick);
 		if(Config.REQUIRE_MORE_LEATHER)
 		{
 			// 6 canvas recipe
-			GameRegistry.addShapedRecipe(new ItemStack(Content.itemTepeeWall, 1), "FSF","FSF","FSF",'F',Items.leather,'S',Items.stick);
+			GameRegistry.addShapedRecipe(new ItemStack(Content.itemTepeeWall, Config.NUM_TEPEE_WALL_OUTPUT), "FSF","FSF","FSF",'F',Items.leather,'S',Items.stick);
 		}
 		else
 		{
 			// 4 canvas recipe
-			GameRegistry.addShapedRecipe(new ItemStack(Content.itemTepeeWall, 1), "FSF","FSF",'F',Items.leather,'S',Items.stick);
+			GameRegistry.addShapedRecipe(new ItemStack(Content.itemTepeeWall, Config.NUM_TEPEE_WALL_OUTPUT), "FSF","FSF",'F',Items.leather,'S',Items.stick);
 		}
+		// bedouin wall
+		ItemStack wool = Config.REQUIRE_CARPET ? new ItemStack(Blocks.carpet, 1, OreDictionary.WILDCARD_VALUE): new ItemStack(Blocks.wool, 1, OreDictionary.WILDCARD_VALUE);
+		GameRegistry.addShapedRecipe(new ItemStack(Content.itemBedWall, Config.NUM_BED_WALL_OUTPUT), "FSF","FSF",'F',wool,'S',Items.stick);
 		
 		if(Config.ALLOW_CRAFT_SUPER_MALLET)
 		{
@@ -66,6 +70,19 @@ public class Crafting
 		if(Config.ALLOW_CRAFT_TEPEE_LARGE)
 		{
 			GameRegistry.addShapedRecipe(StructureType.TEPEE_LARGE.getDropStack(), " F ","FFF","FTF",'F',Content.itemTepeeWall,'T',StructureType.TEPEE_MEDIUM.getDropStack());
+		}
+		// bedouin
+		if(Config.ALLOW_CRAFT_BED_SMALL)
+		{
+			GameRegistry.addShapedRecipe(StructureType.BEDOUIN_SMALL.getDropStack(), " F ","FFF","F F",'F',Content.itemBedWall);
+		}
+		if(Config.ALLOW_CRAFT_BED_MED)
+		{
+			GameRegistry.addShapedRecipe(StructureType.BEDOUIN_MEDIUM.getDropStack(), " F ","FFF","FTF",'F',Content.itemBedWall,'T',StructureType.BEDOUIN_SMALL.getDropStack());
+		}
+		if(Config.ALLOW_CRAFT_BED_LARGE)
+		{
+			GameRegistry.addShapedRecipe(StructureType.BEDOUIN_LARGE.getDropStack(), " F ","FFF","FTF",'F',Content.itemBedWall,'T',StructureType.BEDOUIN_MEDIUM.getDropStack());
 		}
 	}
 }

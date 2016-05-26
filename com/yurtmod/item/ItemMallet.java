@@ -1,6 +1,6 @@
-package com.yurtmod.content;
+package com.yurtmod.item;
 
-import com.yurtmod.main.YurtMain;
+import com.yurtmod.init.NomadicTents;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,7 +17,7 @@ public class ItemMallet extends Item
 	public ItemMallet(ToolMaterial material)
 	{
 		this.setMaxDamage(material.getMaxUses());
-		this.setCreativeTab(YurtMain.tab);
+		this.setCreativeTab(NomadicTents.tab);
 		this.setFull3D();
 		this.setMaxStackSize(1);
 	}

@@ -1,6 +1,4 @@
-package com.yurtmod.content;
-
-import com.yurtmod.dimension.StructureHelper.IYurtBlock;
+package com.yurtmod.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -11,13 +9,13 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class BlockYurtWall extends BlockUnbreakable implements IYurtBlock
+public class BlockLayered extends BlockUnbreakable
 {
 	public static final PropertyBool ABOVE_SIMILAR = PropertyBool.create("above_similar");
 	
-	public BlockYurtWall()
+	public BlockLayered(Material m)
 	{
-		super(Material.cloth);
+		super(m);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(ABOVE_SIMILAR, false));
 	}
 
@@ -48,7 +46,7 @@ public class BlockYurtWall extends BlockUnbreakable implements IYurtBlock
 	@Override
 	public int getMetaFromState(IBlockState state) 
 	{
-		return state.getValue(ABOVE_SIMILAR) == Boolean.valueOf(true) ? 1 : 0;
+		return state.getValue(ABOVE_SIMILAR).booleanValue() ? 1 : 0;
 	}
 	
 	private void updateMetadata(World worldIn, BlockPos myPos)

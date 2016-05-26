@@ -1,4 +1,4 @@
-package com.yurtmod.content;
+package com.yurtmod.item;
 
 public class ItemSuperMallet extends ItemMallet 
 {

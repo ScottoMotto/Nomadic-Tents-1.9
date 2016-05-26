@@ -1,9 +1,9 @@
-package com.yurtmod.content;
+package com.yurtmod.block;
 
-import com.yurtmod.dimension.StructureHelper;
-import com.yurtmod.dimension.StructureType;
 import com.yurtmod.dimension.TentDimension;
 import com.yurtmod.dimension.TentTeleporter;
+import com.yurtmod.structure.StructureHelper;
+import com.yurtmod.structure.StructureType;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;

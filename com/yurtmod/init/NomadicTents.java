@@ -1,11 +1,12 @@
-package com.yurtmod.main;
+package com.yurtmod.init;
 
-import com.yurtmod.content.Content;
 import com.yurtmod.dimension.TentDimension;
+import com.yurtmod.event.TentEventHandler;
 import com.yurtmod.proxies.CommonProxy;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -14,17 +15,15 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
-@Mod(modid = YurtMain.MODID, name = YurtMain.NAME, version = YurtMain.VERSION, acceptedMinecraftVersions = YurtMain.MCVERSION)
-public class YurtMain 
+@Mod(modid = NomadicTents.MODID, name = NomadicTents.NAME, version = NomadicTents.VERSION, acceptedMinecraftVersions = NomadicTents.MCVERSION)
+public class NomadicTents 
 {
 	public static final String MODID = "yurtmod";
 	public static final String NAME = "Nomadic Tents";
-	public static final String VERSION = "4.03";
+	public static final String VERSION = "4.04";
 	public static final String MCVERSION = "1.9";
-	public static final String CLIENT = "com." + MODID + ".proxies.ClientProxy";
-	public static final String SERVER = "com." + MODID + ".proxies.CommonProxy";
 	
-	@SidedProxy(clientSide = CLIENT, serverSide = SERVER)
+	@SidedProxy(clientSide = "com." + MODID + ".proxies.ClientProxy", serverSide = "com." + MODID + ".proxies.CommonProxy")
 	public static CommonProxy proxy;
 	
 	public static CreativeTabs tab;
@@ -50,6 +49,10 @@ public class YurtMain
     public void init(FMLInitializationEvent event)
     {    
 		Crafting.mainRegistry();
+		if(Config.ALLOW_SLEEP_TENT_DIM)
+		{
+			MinecraftForge.EVENT_BUS.register(new TentEventHandler());
+		}
 		if(event.getSide() == Side.CLIENT)
 		{
 			proxy.registerRenders();

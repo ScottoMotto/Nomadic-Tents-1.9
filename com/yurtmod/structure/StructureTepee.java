@@ -1,8 +1,8 @@
-package com.yurtmod.dimension;
+package com.yurtmod.structure;
 
-import com.yurtmod.content.Content;
-import com.yurtmod.content.TileEntityTentDoor;
-import com.yurtmod.dimension.StructureHelper.ITepeeBlock;
+import com.yurtmod.block.Categories.ITepeeBlock;
+import com.yurtmod.block.TileEntityTentDoor;
+import com.yurtmod.init.Content;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -73,8 +73,6 @@ public class StructureTepee
 				teyd.setOffsetZ(offsets[1]);
 				teyd.setOverworldXYZ(prevX, prevY, prevZ);
 				teyd.setPrevDimension(prevDimension);
-				// debug:
-				//System.out.println("OverworldXYZ = " + overworldX + "," + overworldY + "," + overworldZ);
 				return hasStructure;
 			}
 			else System.out.println("Error! Failed to retrive TileEntityYurtDoor at " + cornerX + ", " + (StructureHelper.FLOOR_Y + 1) + ", " + doorZ);
@@ -84,18 +82,25 @@ public class StructureTepee
 
 	private static boolean generateSmallInDimension(World worldIn, BlockPos doorBase) 
 	{
-		return generateSmall(worldIn, doorBase, StructureHelper.STRUCTURE_DIR, Content.tepeeDoorSmall, Content.tepeeWall, Content.barrier, true);
+		boolean flag = generateSmall(worldIn, doorBase, StructureHelper.STRUCTURE_DIR, Content.tepeeDoorSmall, Content.tepeeWall);
+		// place barrier block
+		BlockPos pos = StructureHelper.getPosFromDoor(doorBase, StructureHelper.tepeeBarrierSmall[0], StructureHelper.tepeeBarrierSmall[1], StructureHelper.STRUCTURE_DIR);
+		worldIn.setBlockState(pos.up(LAYER_DEPTH * 3), Content.barrier.getDefaultState());
+		// dirt floor
+		StructureHelper.refinePlatform(worldIn, doorBase, StructureHelper.tepeeLayer1Small);
+		return flag;
 	}
 	
 	/** (Helper function) Warning: does not check canSpawnSmallTepee before generating */
 	public static boolean generateSmallInOverworld(World worldIn, BlockPos doorBase, Block door, EnumFacing dirForward)
 	{
-		return generateSmall(worldIn, doorBase, dirForward, door, Content.tepeeWallFrame, Blocks.air, false);
+		return generateSmall(worldIn, doorBase, dirForward, door, Content.tepeeWallFrame);
 	}
 
 	public static boolean deleteSmall(World worldIn, BlockPos pos, EnumFacing dirForward)
 	{
-		boolean flag = generateSmall(worldIn, pos, dirForward, Blocks.air, Blocks.air, Blocks.air, false);
+		boolean flag = generateSmall(worldIn, pos, dirForward, Blocks.air, Blocks.air);
+		// remove TileEntity if found
 		if(worldIn.getTileEntity(pos) instanceof TileEntityTentDoor)
 		{
 			worldIn.removeTileEntity(pos);
@@ -104,53 +109,61 @@ public class StructureTepee
 		{
 			worldIn.removeTileEntity(pos.up(1));
 		}
+		// remove barrier if found
+		BlockPos barrier = StructureHelper.getPosFromDoor(pos, StructureHelper.tepeeBarrierSmall[0], StructureHelper.tepeeBarrierSmall[1], StructureHelper.STRUCTURE_DIR);
+		barrier = barrier.up(LAYER_DEPTH * 3);
+		if(worldIn.getBlockState(barrier).getBlock() == Content.barrier)
+		{
+			worldIn.setBlockToAir(barrier);
+		}
 		return flag;
 	}
 
 	public static boolean generateMedInDimension(World worldIn, BlockPos doorBase) 
 	{
-		return generateMedium(worldIn, doorBase, StructureHelper.STRUCTURE_DIR, Content.tepeeDoorMed, Content.tepeeWall, Content.barrier, true);
+		boolean flag = generateMedium(worldIn, doorBase, StructureHelper.STRUCTURE_DIR, Content.tepeeDoorMed, Content.tepeeWall);
+		// place barrier block
+		BlockPos pos = StructureHelper.getPosFromDoor(doorBase, StructureHelper.tepeeBarrierMed[0], StructureHelper.tepeeBarrierMed[1], StructureHelper.STRUCTURE_DIR);
+		worldIn.setBlockState(pos.up(LAYER_DEPTH * 3), Content.barrier.getDefaultState());
+		// make dirt layer
+		StructureHelper.refinePlatform(worldIn, doorBase, StructureHelper.tepeeLayer1Med);
+		return flag;
 	}
 
 	public static boolean generateLargeInDimension(World worldIn, BlockPos doorBase) 
 	{
-		boolean flag = generateLarge(worldIn, doorBase, StructureHelper.STRUCTURE_DIR, Content.tepeeDoorLarge, Content.tepeeWall, Content.barrier, true);
+		boolean flag = generateLarge(worldIn, doorBase, StructureHelper.STRUCTURE_DIR, Content.tepeeDoorLarge, Content.tepeeWall);
 		StructureHelper.buildFire(worldIn, Blocks.netherrack, doorBase.down(1).east(4));
+		// place barrier block
+		BlockPos pos = StructureHelper.getPosFromDoor(doorBase, StructureHelper.tepeeBarrierLarge[0], StructureHelper.tepeeBarrierLarge[1], StructureHelper.STRUCTURE_DIR);
+		worldIn.setBlockState(pos.up(LAYER_DEPTH * 5), Content.barrier.getDefaultState());
+		// make dirt layer
+		StructureHelper.refinePlatform(worldIn, doorBase, StructureHelper.tepeeLayer1Large);
 		return flag;
 	}
 	
-	/** Warning: does not check canSpawnSmallYurt before generating */
-	public static boolean generateSmall(World worldIn, BlockPos doorBase, EnumFacing dirForward, Block doorBlock, Block wallBlock, Block barrier, boolean hasNegativeFloor)
+	/** Warning: does not check canSpawnSmallTepee before generating */
+	public static boolean generateSmall(World worldIn, BlockPos doorBase, EnumFacing dirForward, Block doorBlock, Block wallBlock)
 	{	
-		if(!worldIn.isRemote)
+		//if(!worldIn.isRemote)
 		{
-			// debug:
-			//System.out.println("generating Small Tepee");
 			// make layer 1 and 2
 			StructureHelper.build2TepeeLayers(worldIn, doorBase.up(LAYER_DEPTH * 0), dirForward, wallBlock, StructureHelper.tepeeLayer1Small);
 			// make layer 3 and 4
 			StructureHelper.build2TepeeLayers(worldIn, doorBase.up(LAYER_DEPTH * 1), dirForward, wallBlock, StructureHelper.tepeeLayer2Small);
 			// make layer 5 and 6
 			StructureHelper.build2TepeeLayers(worldIn, doorBase.up(LAYER_DEPTH * 2), dirForward, wallBlock, StructureHelper.tepeeLayer3Small);
-			// place barrier block
-			BlockPos pos = StructureHelper.getPosFromDoor(doorBase, StructureHelper.tepeeBarrierSmall[0], StructureHelper.tepeeBarrierSmall[1], dirForward);
-			worldIn.setBlockState(pos.up(LAYER_DEPTH * 3), barrier.getDefaultState());
-			// make dirt layer if required
-			if(hasNegativeFloor && dirForward == StructureHelper.STRUCTURE_DIR)
-			{
-				StructureHelper.refinePlatform(worldIn, doorBase, StructureHelper.tepeeLayer1Small);
-			}
 			// make door
 			worldIn.setBlockState(doorBase, doorBlock.getStateFromMeta(0), 3);
 			worldIn.setBlockState(doorBase.up(1), doorBlock.getStateFromMeta(1), 3);
 			return true;
 		}
-		return false;
+		//return false;
 	}
 	
-	public static boolean generateMedium(World worldIn, BlockPos doorBase, EnumFacing dirForward, Block doorBlock, Block wallBlock, Block barrier, boolean hasNegativeFloor)
+	public static boolean generateMedium(World worldIn, BlockPos doorBase, EnumFacing dirForward, Block doorBlock, Block wallBlock)
 	{
-		if(!worldIn.isRemote)
+		//if(!worldIn.isRemote)
 		{
 			// debug:
 			System.out.println("generating Medium Tepee");
@@ -160,25 +173,17 @@ public class StructureTepee
 			StructureHelper.build2TepeeLayers(worldIn, doorBase.up(LAYER_DEPTH * 1), dirForward, wallBlock, StructureHelper.tepeeLayer2Med);
 			// make layer 5 and 6
 			StructureHelper.build2TepeeLayers(worldIn, doorBase.up(LAYER_DEPTH * 2), dirForward, wallBlock, StructureHelper.tepeeLayer3Med);
-			// place barrier block
-			BlockPos pos = StructureHelper.getPosFromDoor(doorBase, StructureHelper.tepeeBarrierMed[0], StructureHelper.tepeeBarrierMed[1], dirForward);
-			worldIn.setBlockState(pos.up(LAYER_DEPTH * 3), barrier.getDefaultState());
-			// make dirt layer if required
-			if(hasNegativeFloor && dirForward == StructureHelper.STRUCTURE_DIR)
-			{
-				StructureHelper.refinePlatform(worldIn, doorBase, StructureHelper.tepeeLayer1Med);
-			}
 			// make door
 			worldIn.setBlockState(doorBase, doorBlock.getStateFromMeta(0), 3);
 			worldIn.setBlockState(doorBase.up(1), doorBlock.getStateFromMeta(1), 3);
 			return true;
 		}
-		return false;
+		//return false;
 	}
 	
-	public static boolean generateLarge(World worldIn, BlockPos doorBase, EnumFacing dirForward, Block doorBlock, Block wallBlock, Block barrier, boolean hasNegativeFloor)
+	public static boolean generateLarge(World worldIn, BlockPos doorBase, EnumFacing dirForward, Block doorBlock, Block wallBlock)
 	{
-		if(!worldIn.isRemote)
+		//if(!worldIn.isRemote)
 		{
 			// debug:
 			System.out.println("generating Large Tepee");
@@ -192,20 +197,12 @@ public class StructureTepee
 			StructureHelper.build2TepeeLayers(worldIn, doorBase.up(LAYER_DEPTH * 3), dirForward, wallBlock, StructureHelper.tepeeLayer4Large);
 			// make layer 7 and 8
 			StructureHelper.build2TepeeLayers(worldIn, doorBase.up(LAYER_DEPTH * 4), dirForward, wallBlock, StructureHelper.tepeeLayer5Large);
-			// place barrier block
-			BlockPos pos = StructureHelper.getPosFromDoor(doorBase, StructureHelper.tepeeBarrierLarge[0], StructureHelper.tepeeBarrierLarge[1], dirForward);
-			worldIn.setBlockState(pos.up(LAYER_DEPTH * 5), barrier.getDefaultState());
-			// make dirt layer if required
-			if(hasNegativeFloor && dirForward == StructureHelper.STRUCTURE_DIR)
-			{
-				StructureHelper.refinePlatform(worldIn, doorBase, StructureHelper.tepeeLayer1Large);
-			}
 			// make door
 			worldIn.setBlockState(doorBase, doorBlock.getStateFromMeta(0), 3);
 			worldIn.setBlockState(doorBase.up(1), doorBlock.getStateFromMeta(1), 3);
 			return true;
 		}
-		return false;
+		//return false;
 	}
 	
 	public static boolean canSpawnSmallTepee(World worldIn, BlockPos door, EnumFacing dirForward)
@@ -253,7 +250,7 @@ public class StructureTepee
 		BlockPos pos;
 		// check each direction
 		loopCheckDirection:
-		for(EnumFacing dir : EnumFacing.Plane.HORIZONTAL.facings())
+		for(EnumFacing dir : EnumFacing.HORIZONTALS)
 		{
 			boolean isValid = true;
 			for(int layer = 0; isValid && layer < LAYER_DEPTH; layer++)

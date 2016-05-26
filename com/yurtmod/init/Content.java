@@ -1,6 +1,19 @@
-package com.yurtmod.content;
+package com.yurtmod.init;
 
-import com.yurtmod.main.YurtMain;
+import com.yurtmod.block.BlockBarrier;
+import com.yurtmod.block.BlockBedouinRoof;
+import com.yurtmod.block.BlockBedouinWall;
+import com.yurtmod.block.BlockTentDoor;
+import com.yurtmod.block.BlockTentFrame;
+import com.yurtmod.block.BlockTentFrame.BlockToBecome;
+import com.yurtmod.block.BlockTepeeWall;
+import com.yurtmod.block.BlockUnbreakable;
+import com.yurtmod.block.BlockYurtRoof;
+import com.yurtmod.block.BlockYurtWall;
+import com.yurtmod.block.TileEntityTentDoor;
+import com.yurtmod.item.ItemMallet;
+import com.yurtmod.item.ItemSuperMallet;
+import com.yurtmod.item.ItemTent;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -19,18 +32,25 @@ public class Content
 	public static Block yurtRoof;		
 	public static Block yurtOuterWall;		
 	public static Block yurtInnerWall;	
-	public static Block tepeeWall;	
+	public static Block tepeeWall;
+	public static Block bedWall;
+	public static Block bedRoof;
 
 	public static Block yurtDoorSmall;	
 	public static Block yurtDoorMed;		
 	public static Block yurtDoorLarge;		
 	public static Block tepeeDoorSmall; 	
 	public static Block tepeeDoorMed;		
-	public static Block tepeeDoorLarge;		
+	public static Block tepeeDoorLarge;	
+	public static Block bedDoorSmall;
+	public static Block bedDoorMed;
+	public static Block bedDoorLarge;
 
 	public static Block yurtWallFrame;		
 	public static Block yurtRoofFrame;		
 	public static Block tepeeWallFrame;
+	public static Block bedWallFrame;
+	public static Block bedRoofFrame;
 	
 	public static ItemBlock ibBarrier;
 	public static ItemBlock ibSuperDirt;
@@ -38,15 +58,22 @@ public class Content
 	public static ItemBlock ibYurtOuterWall;
 	public static ItemBlock ibYurtInnerWall;
 	public static ItemBlock ibTepeeWall;
+	public static ItemBlock ibBedWall;
+	public static ItemBlock ibBedRoof;
 	public static ItemBlock ibYurtDoorSmall;
 	public static ItemBlock ibYurtDoorMed;
 	public static ItemBlock ibYurtDoorLarge;
 	public static ItemBlock ibTepeeDoorSmall;
 	public static ItemBlock ibTepeeDoorMed;
 	public static ItemBlock ibTepeeDoorLarge;
+	public static ItemBlock ibBedDoorSmall;
+	public static ItemBlock ibBedDoorMed;
+	public static ItemBlock ibBedDoorLarge;
 	public static ItemBlock ibYurtWallFrame;
 	public static ItemBlock ibYurtRoofFrame;
 	public static ItemBlock ibTepeeWallFrame;
+	public static ItemBlock ibBedWallFrame;
+	public static ItemBlock ibBedRoofFrame;
 
 	public static Item itemTent;
 	public static Item itemMallet;
@@ -54,6 +81,7 @@ public class Content
 	public static Item itemTentCanvas;
 	public static Item itemYurtWall;
 	public static Item itemTepeeWall;
+	public static Item itemBedWall;
 
 	public static void mainRegistry()
 	{
@@ -75,6 +103,8 @@ public class Content
 		yurtInnerWall = new BlockYurtWall();
 		yurtRoof = new BlockYurtRoof();
 		tepeeWall = new BlockTepeeWall();
+		bedWall = new BlockBedouinWall();
+		bedRoof = new BlockBedouinRoof();
 		// doors
 		yurtDoorSmall = new BlockTentDoor();
 		yurtDoorMed = new BlockTentDoor();
@@ -82,10 +112,15 @@ public class Content
 		tepeeDoorSmall = new BlockTentDoor();
 		tepeeDoorMed = new BlockTentDoor();
 		tepeeDoorLarge = new BlockTentDoor();
+		bedDoorSmall = new BlockTentDoor();
+		bedDoorMed = new BlockTentDoor();
+		bedDoorLarge = new BlockTentDoor();
 		// frame blocks
-		yurtWallFrame = new BlockTentFrame(BlockTentFrame.BlockToBecome.YURT_WALL_OUTER);
-		yurtRoofFrame = new BlockTentFrame(BlockTentFrame.BlockToBecome.YURT_ROOF);
-		tepeeWallFrame = new BlockTentFrame(BlockTentFrame.BlockToBecome.TEPEE_WALL);
+		yurtWallFrame = new BlockTentFrame(BlockToBecome.YURT_WALL_OUTER);
+		yurtRoofFrame = new BlockTentFrame(BlockToBecome.YURT_ROOF);
+		tepeeWallFrame = new BlockTentFrame(BlockToBecome.TEPEE_WALL);
+		bedWallFrame = new BlockTentFrame(BlockToBecome.BEDOUIN_WALL);
+		bedRoofFrame = new BlockTentFrame(BlockToBecome.BEDOUIN_ROOF);
 	}
 	
 	private static void initItemBlocks()
@@ -96,6 +131,8 @@ public class Content
 		ibYurtInnerWall = new ItemBlock(yurtInnerWall);
 		ibYurtRoof = new ItemBlock(yurtRoof);
 		ibTepeeWall = new ItemBlock(tepeeWall);
+		ibBedWall = new ItemBlock(bedWall);
+		ibBedRoof = new ItemBlock(bedRoof);
 		// doors
 		ibYurtDoorSmall = new ItemBlock(yurtDoorSmall);
 		ibYurtDoorMed = new ItemBlock(yurtDoorMed);
@@ -103,10 +140,15 @@ public class Content
 		ibTepeeDoorSmall = new ItemBlock(tepeeDoorSmall);
 		ibTepeeDoorMed = new ItemBlock(tepeeDoorMed);
 		ibTepeeDoorLarge = new ItemBlock(tepeeDoorLarge);
+		ibBedDoorSmall = new ItemBlock(bedDoorSmall);
+		ibBedDoorMed = new ItemBlock(bedDoorMed);
+		ibBedDoorLarge = new ItemBlock(bedDoorLarge);
 		// frame blocks
 		ibYurtWallFrame = new ItemBlock(yurtWallFrame);
 		ibYurtRoofFrame = new ItemBlock(yurtRoofFrame);
 		ibTepeeWallFrame = new ItemBlock(tepeeWallFrame);
+		ibBedWallFrame = new ItemBlock(bedWallFrame);
+		ibBedRoofFrame = new ItemBlock(bedRoofFrame);
 	}
 	
 	private static void initItems()
@@ -116,9 +158,10 @@ public class Content
 		itemMallet = new ItemMallet(ToolMaterial.IRON);
 		itemSuperMallet = new ItemSuperMallet(ToolMaterial.DIAMOND);
 		// crafting only
-		itemTentCanvas = new Item().setCreativeTab(YurtMain.tab);
-		itemYurtWall = new Item().setCreativeTab(YurtMain.tab);
-		itemTepeeWall = new Item().setCreativeTab(YurtMain.tab);
+		itemTentCanvas = new Item().setCreativeTab(NomadicTents.tab);
+		itemYurtWall = new Item().setCreativeTab(NomadicTents.tab);
+		itemTepeeWall = new Item().setCreativeTab(NomadicTents.tab);
+		itemBedWall = new Item().setCreativeTab(NomadicTents.tab);
 	}
 
 	private static void registerBlocks() 
@@ -129,6 +172,8 @@ public class Content
 		register(yurtInnerWall, ibYurtInnerWall, "yurt_wall_inner");
 		register(yurtRoof, ibYurtRoof, "yurt_roof");
 		register(tepeeWall, ibTepeeWall, "tepee_wall");
+		register(bedWall, ibBedWall, "bed_wall");
+		register(bedRoof, ibBedRoof, "bed_roof");
 		// doors
 		register(yurtDoorSmall, ibYurtDoorSmall, "yurt_door_0");
 		register(yurtDoorMed, ibYurtDoorMed, "yurt_door_1");
@@ -136,10 +181,15 @@ public class Content
 		register(tepeeDoorSmall, ibTepeeDoorSmall, "tepee_door_0");
 		register(tepeeDoorMed, ibTepeeDoorMed, "tepee_door_1");
 		register(tepeeDoorLarge, ibTepeeDoorLarge, "tepee_door_2");
+		register(bedDoorSmall, ibBedDoorSmall, "bed_door_0");
+		register(bedDoorMed, ibBedDoorMed, "bed_door_1");
+		register(bedDoorLarge, ibBedDoorLarge, "bed_door_2");
 		// frame blocks
 		register(yurtWallFrame, ibYurtWallFrame, "frame_yurt_wall");
 		register(yurtRoofFrame, ibYurtRoofFrame, "frame_yurt_roof");
 		register(tepeeWallFrame, ibTepeeWallFrame, "frame_tepee_wall");
+		register(bedWallFrame, ibBedWallFrame, "frame_bed_wall");
+		register(bedRoofFrame, ibBedRoofFrame, "frame_bed_roof");
 	}
 
 	private static void registerItems() 
@@ -150,23 +200,34 @@ public class Content
 		register(itemTentCanvas, "tent_canvas");
 		register(itemYurtWall, "yurt_wall_piece");
 		register(itemTepeeWall, "tepee_wall_piece");
+		register(itemBedWall, "bed_wall_piece");
 	}
 
 	private static void registerTileEntity(Class <? extends TileEntity> te, String name) 
 	{
-		GameRegistry.registerTileEntity(te, YurtMain.MODID + "." + name);	
+		GameRegistry.registerTileEntity(te, NomadicTents.MODID + "." + name);	
 	}
-
+	
 	private static void register(Item item, String name)
 	{
-		item.setUnlocalizedName(name).setRegistryName(YurtMain.MODID, name);
-		GameRegistry.register(item);
+		register(item, name, name);
 	}
 	
 	private static void register(Block block, ItemBlock ib, String name)
 	{
-		block.setUnlocalizedName(name).setRegistryName(YurtMain.MODID, name);
-		ib.setUnlocalizedName(name).setRegistryName(YurtMain.MODID, name);
+		register(block, ib, name, name);
+	}
+
+	private static void register(Item item, String name, String unlocal)
+	{
+		item.setUnlocalizedName(unlocal).setRegistryName(NomadicTents.MODID, name);
+		GameRegistry.register(item);
+	}
+	
+	private static void register(Block block, ItemBlock ib, String name, String unlocal)
+	{
+		block.setUnlocalizedName(unlocal).setRegistryName(NomadicTents.MODID, name);
+		ib.setUnlocalizedName(unlocal).setRegistryName(NomadicTents.MODID, name);
 		GameRegistry.register(block);
 		GameRegistry.register(ib);
 	}

@@ -11,7 +11,6 @@ import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.chunk.IChunkGenerator;
-import net.minecraft.world.chunk.IChunkProvider;
 
 public class TentChunkGenerator implements IChunkGenerator
 {
@@ -27,22 +26,6 @@ public class TentChunkGenerator implements IChunkGenerator
 	public Chunk provideChunk(int x, int z) 
 	{
 		ChunkPrimer chunkprimer = new ChunkPrimer();
-		/*
-		IBlockState airstate = Blocks.air.getDefaultState();
-		IBlockState layer0state = Blocks.bedrock.getDefaultState();
-		IBlockState layer1state = Blocks.water.getDefaultState();
-		for (int i = 0; i < 256; ++i)
-		{
-			for (int j = 0; j < 16; ++j)
-			{
-				for (int k = 0; k < 16; ++k)
-				{
-					IBlockState toSet = i == 0 ? layer0state : (i == 1 ? layer1state : airstate);
-					chunkprimer.setBlockState(j, i, k, toSet);
-				}
-			}
-		}
-		 */
 		Chunk chunk = new Chunk(this.worldObj, chunkprimer, x, z);
 		BiomeGenBase[] abiomegenbase = this.worldObj.getBiomeProvider().loadBlockGeneratorData((BiomeGenBase[])null, x * 16, z * 16, 16, 16);
         byte[] abyte = chunk.getBiomeArray();

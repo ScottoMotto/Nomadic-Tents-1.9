@@ -1,6 +1,6 @@
-package com.yurtmod.content;
+package com.yurtmod.block;
 
-import com.yurtmod.main.YurtMain;
+import com.yurtmod.init.NomadicTents;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -16,7 +16,7 @@ public class BlockUnbreakable extends Block
 		super(material);
 		this.setBlockUnbreakable();
 		this.setResistance(6000000.0F);
-		this.setCreativeTab(YurtMain.tab);
+		this.setCreativeTab(NomadicTents.tab);
 		this.setStepSound(SoundType.WOOD);
 	}
 }

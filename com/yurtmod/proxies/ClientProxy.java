@@ -1,9 +1,9 @@
 package com.yurtmod.proxies;
 
-import com.yurtmod.content.BlockTepeeWall;
-import com.yurtmod.content.Content;
-import com.yurtmod.dimension.StructureType;
-import com.yurtmod.main.YurtMain;
+import com.yurtmod.block.BlockTepeeWall;
+import com.yurtmod.init.Content;
+import com.yurtmod.init.NomadicTents;
+import com.yurtmod.structure.StructureType;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelBakery;
@@ -22,7 +22,7 @@ public class ClientProxy extends CommonProxy
 		ResourceLocation[] namesTepeeWall = new ResourceLocation[BlockTepeeWall.NUM_TEXTURES];
 		for(int i = 0; i < len; i++)
 		{
-			String modelName = YurtMain.MODID + ":" + StructureType.getName(i);
+			String modelName = NomadicTents.MODID + ":" + StructureType.getName(i);
 			namesTentItem[i] = new ResourceLocation(modelName);
 			ModelLoader.setCustomModelResourceLocation(Content.itemTent, i, new ModelResourceLocation(modelName, "inventory"));
 			// debug:
@@ -47,32 +47,31 @@ public class ClientProxy extends CommonProxy
 		register(Content.itemTentCanvas);
 		register(Content.itemYurtWall);
 		register(Content.itemTepeeWall);
+		register(Content.itemBedWall);
 		register(Content.itemMallet);
 		register(Content.itemSuperMallet);
 		//// register tent item
-		for(int i = 0, len = StructureType.values().length; i < len; i++)
+		for(StructureType type : StructureType.values())
 		{
-			// getName returns something like "yurt_small"
-			String modelName = YurtMain.MODID + ":" + StructureType.getName(i);
-			register(Content.itemTent, i, modelName);
-			// debug:
-			//System.out.println("registering tent item with name '" + modelName + "'");
+			String modelName = NomadicTents.MODID + ":" + StructureType.getName(type.ordinal());
+			register(Content.itemTent, type.ordinal(), modelName);
 		}
 		// register blocks
 		register(Content.ibBarrier);
 		register(Content.ibSuperDirt);
-		//// wall blocks
+		//// yurt blocks
 		register(Content.ibYurtOuterWall);
 		register(Content.ibYurtInnerWall);
 		register(Content.ibYurtRoof);
-		//// tepee wall block
+		//// tepee blocks
 		for(int j = 0; j < BlockTepeeWall.NUM_TEXTURES; j++)
 		{
 			String name = Content.ibTepeeWall.getRegistryName().toString() + "_" + j;
 			register(Content.ibTepeeWall, j, name);
-			// debug:
-			//System.out.println("registering tepee wall with name '" + name + "'");
 		}
+		//// bedouin blocks
+		register(Content.ibBedWall);
+		register(Content.ibBedRoof);
 		//// door blocks		
 		register(Content.ibYurtDoorSmall);
 		register(Content.ibYurtDoorMed);
@@ -80,13 +79,15 @@ public class ClientProxy extends CommonProxy
 		register(Content.ibTepeeDoorSmall);
 		register(Content.ibTepeeDoorMed);
 		register(Content.ibTepeeDoorLarge);
+		register(Content.ibBedDoorSmall);
+		register(Content.ibBedDoorMed);
+		register(Content.ibBedDoorLarge);
 		//// frame blocks
 		register(Content.ibYurtWallFrame);
 		register(Content.ibYurtRoofFrame);
 		register(Content.ibTepeeWallFrame);
-		
-		// debug:
-		//System.out.println("Finished registering inventory renders with the ItemModelMesher");
+		register(Content.ibBedWallFrame);
+		register(Content.ibBedRoofFrame);
 	}
 	
 	private void register(Item i)

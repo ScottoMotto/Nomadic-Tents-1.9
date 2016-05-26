@@ -1,5 +1,11 @@
 package com.yurtmod.dimension;
 
+import com.yurtmod.structure.StructureBedouin;
+import com.yurtmod.structure.StructureHelper;
+import com.yurtmod.structure.StructureTepee;
+import com.yurtmod.structure.StructureType;
+import com.yurtmod.structure.StructureYurt;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
@@ -37,7 +43,7 @@ public class TentTeleporter extends Teleporter
 			float yaw;
 			entity.motionX = entity.motionY = entity.motionZ = 0.0D;
 
-			if(TentDimension.isTentDimension(worldServer.provider.getDimension()))
+			if(TentDimension.isTentDimension(worldServer))
 			{	
 				entityX = this.tentCorner.getX() + 1.5D;
 				entityY = this.tentCorner.getY() + 0.01D;
@@ -52,8 +58,11 @@ public class TentTeleporter extends Teleporter
 				case TEPEE_LARGE: case TEPEE_MEDIUM: case TEPEE_SMALL:
 					new StructureTepee(this.structure).generateInTentDimension(prevDimID, worldServer, tentCorner.getX(), tentCorner.getZ(), prevX, prevY, prevZ);
 					break;
+				case BEDOUIN_LARGE: case BEDOUIN_MEDIUM: case BEDOUIN_SMALL:
+					new StructureBedouin(this.structure).generateInTentDimension(prevDimID, worldServer, tentCorner.getX(), tentCorner.getZ(), prevX, prevY, prevZ);
+					break;
 				default:
-					StructureHelper.generatePlatform(worldServer, tentCorner.getX(), StructureHelper.FLOOR_Y, tentCorner.getZ(), 8);
+					StructureHelper.generatePlatform(worldServer, tentCorner, 8);
 					System.out.println("Error: unhandled structure type resulted in empty platform");
 					break;
 				}

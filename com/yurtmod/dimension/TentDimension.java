@@ -1,6 +1,7 @@
 package com.yurtmod.dimension;
 
 import net.minecraft.world.DimensionType;
+import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 
 public class TentDimension 
@@ -12,6 +13,11 @@ public class TentDimension
 	public static void mainRegistry()
 	{
 		DimensionManager.registerDimension(DIMENSION_ID, TentDimension.TENT_DIMENSION);
+	}
+	
+	public static boolean isTentDimension(World world)
+	{
+		return isTentDimension(world.provider.getDimension());
 	}
 	
 	public static boolean isTentDimension(int id)
